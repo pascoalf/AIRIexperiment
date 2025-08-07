@@ -176,7 +176,64 @@ non_redundant_by_mutualInfo <-
 
 
 ## idea: summarise metrics by method to solve non-redundant rules --> what method obtained highest conviction?
-  
-  
-  
-  
+non_redundant_by_mutualInfo$Metric <- "Mutual\ninformation"
+non_redundant_by_complexity$Metric <- "Complexity"
+dependent_rules_non_redundant$Metric <-"Improvement"   
+
+all_non_redundant <- 
+  rbind(non_redundant_by_mutualInfo,
+      non_redundant_by_complexity,
+      dependent_rules_non_redundant) %>% 
+  mutate(Classification = case_when(str_detect(RHS, "Abundant") ~ "Abundant",
+                                    str_detect(RHS, "Undetermined") ~ "Undetermined",
+                                    str_detect(RHS, "Rare") ~ "Rare")) 
+
+
+gridExtra::grid.arrange(
+all_non_redundant %>% 
+  ggplot(aes(Metric, confidence)) + 
+  geom_boxplot(outlier.shape = "cross", outlier.color = "red") + 
+  geom_jitter(height = 0, width = 0.1, col = "grey") +
+  theme_classic() + 
+  labs(y = "Confidence"),
+all_non_redundant %>% 
+  ggplot(aes(Metric, lift)) + 
+  geom_boxplot(outlier.shape = "cross", outlier.color = "red") +
+  geom_jitter(height = 0, width = 0.1, col = "grey") +
+  theme_classic() + 
+  labs(y = "Lift"),
+all_non_redundant %>% 
+  ggplot(aes(Metric, conviction)) + 
+  geom_boxplot(outlier.shape = "cross", outlier.color = "red") + 
+  geom_jitter(height = 0, width = 0.1, col = "grey") +
+  theme_classic() + 
+  labs(y = "Conviction"), ncol = 3)
+
+
+# percent shared rules
+shared_rules <- all_non_redundant %>% 
+  mutate(rule = paste(LHS, "->",RHS)) %>% 
+  select(rule, Metric) %>% 
+  distinct()
+
+# venn diagram
+ggVennDiagram(x = list(non_redundant_by_mutualInfo$LHS,
+                       non_redundant_by_complexity$LHS,
+                       dependent_rules_non_redundant$LHS),
+              category.names = c("Mutual\nInformation",
+                                 "Complexity",
+                                 "Improvement"),
+              label_size = 4) + 
+  scale_fill_gradient(low = "#F4FAFE", high = "#4981BF") +
+  guides(fill = "none") +
+  xlim(-6,9)+
+  ylim(-9,6)
+
+
+
+## save non redundant rules for inspection
+#non_redundant_by_mutualInfo %>% write.csv("output/Rd_mutual_info_case1.csv")
+#non_redundant_by_complexity %>% write.csv("output/Rd_complex_case1.csv")
+#dependent_rules_non_redundant %>% write.csv("output/Rd_improv_case1.csv")
+
+

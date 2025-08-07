@@ -28,9 +28,6 @@ full_rules <- apriori(transactions_full,
                       parameter = list(support = 0.001,minlen = 2, maxlen = 14),
                       appearance = list(rhs = classifications_rhs))
 
-#plot(full_rules)
-reds <- RColorBrewer::brewer.pal(9, "Reds")
-
 #
 full_rules_df <- DATAFRAME(full_rules)
 
@@ -70,10 +67,6 @@ full_rules_df %>%
 full_rules %>% summary()
 
 
-# check top10 by lift
-top100_rules_by_lift <- full_rules_df %>% 
-  arrange(desc(lift)) %>% 
-  head(100) 
 
 
 
