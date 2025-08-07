@@ -51,4 +51,7 @@ rsconnect/
 #
 AIRIexperiment.Rproj
 
+# Large files
+AO_ASVs_env_clean.csv
+
 
