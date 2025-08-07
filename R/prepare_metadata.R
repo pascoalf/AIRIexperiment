@@ -52,6 +52,6 @@ env_cat <- env_data %>%
 ##
 
 # save object with discrete variables
-saveRDS(env_cat, "output/environmental_data_category.rds")
+saveRDS(env_cat, "data/environmental_data_category.rds")
 
 

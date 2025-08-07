@@ -52,7 +52,7 @@ env_data <- ASVs_env_clean %>%
       where(is.double), ~round(.x, digits = 3))) %>% 
   distinct()
 
-saveRDS(env_data, "./output/env_data.rds")
+saveRDS(env_data, "data/env_data.rds")
 
 # join collapsed taxa table with env data
 full_table <- taxa_table %>% left_join(env_data)
