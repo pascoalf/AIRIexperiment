@@ -31,61 +31,12 @@ full_rules_df %>%
   pull(Dependence) %>% table()
 
 #
-full_rules_dependent %>% 
-  DATAFRAME() %>% 
-  filter(!is.infinite(conviction)) %>% 
-  ggplot(aes(conviction, confidence, col = lift)) + 
-  geom_point(size = 4) + 
-  scale_color_gradient(low = reds[1], high = reds[9]) + 
-  labs(x = "Conviction",
-       y = "Confidence",
-       col = "Lift: ") + 
-  theme_classic() + 
-  theme(legend.position = "top",
-        axis.title = element_text(size = 16),
-        axis.text = element_text(size = 14),
-        legend.text = element_text(size = 12),
-        legend.title = element_text(size = 14),
-        panel.background = element_rect(fill = "grey90")) + 
-  lims(y = c(0.80, 1.0))
-
 ## Step 2 - remove redundant rules
 # Calculate Mutual information and Improvement
 quality(full_rules_dependent)$mutualInfo <- interestMeasure(full_rules_dependent,
                                                             measure = "mutualInformation")
 quality(full_rules_dependent)$improvement <- interestMeasure(full_rules_dependent,
                                                              measure = "improvement")
-# Inspect scores for dependent rules
-gridExtra::grid.arrange(
-  # improvement
-  quality(full_rules_dependent) %>% 
-    ggplot(aes(conviction, confidence))+
-    geom_point(aes(size = improvement, col = lift))+
-    scale_color_gradient(low = reds[1], high = reds[9]) + 
-    theme_classic() + 
-    theme(legend.position = "top",
-          panel.background = element_rect(fill = "grey90")) +
-    labs(x = "Conviction",
-         y = "Confidence",
-         col = "Lift: ",
-         size = "Improvement: ")# + 
-  #guides(size  = FALSE)
-  ,
-  # mutual information
-  quality(full_rules_dependent) %>% 
-    ggplot(aes(conviction, confidence))+
-    geom_point(aes(size = mutualInfo, col = lift))+
-    scale_color_gradient(low = reds[1], high = reds[9]) + 
-    theme_classic() + 
-    theme(legend.position = "top",
-          panel.background = element_rect(fill = "grey90"))+
-    labs(x = "Conviction",
-         y = "Confidence",
-         col = "Lift: ",
-         size = "Mutual\nInformation: "), 
-  nrow=2
-)
-
 
 quality(full_rules_dependent) %>% 
   filter(!is.infinite(conviction)) %>% 
@@ -102,18 +53,32 @@ quality(full_rules_dependent) %>%
   theme_classic() + 
   facet_grid(~Metric) + 
   theme(legend.position = "top",
-        axis.text = element_text(size = 14),
-        axis.title = element_text(size = 16),
-        legend.text = element_text(size = 14),
-        legend.title = element_text(size = 14),
-        strip.text = element_text(size = 14),
-        strip.background = element_blank(),
+        #axis.text = element_text(size = 14),
+        #axis.title = element_text(size = 16),
+        #legend.text = element_text(size = 14),
+        #legend.title = element_text(size = 14),
+        #strip.text = element_text(size = 14),
+        #strip.background = element_blank(),
         panel.background = element_rect(fill = "grey89")) + 
   labs(x = "Conviction",
        y = "Confidence",
        col = "Lift: ",
        size = "Score: ")
 #
+full_rules_dependent %>% 
+  DATAFRAME() %>% 
+  pivot_longer(cols = c("lift", "conviction", "confidence"),
+               names_to = "Metric",
+               values_to = "Score") %>%
+  mutate(RHS = str_remove(RHS, "\\{Classification="),
+         RHS = str_remove(RHS, "\\}")) %>% 
+  mutate(RHS = factor(RHS, levels = c("Rare", "Undetermined", "Abundant"))) %>% 
+  ggplot(aes(RHS, Score)) + 
+  geom_boxplot() + 
+  theme_classic() +
+  facet_wrap(~Metric, scales = "free")+
+  labs(y = "Lift",
+       x = "Consequent") 
 
 
 ## dependent rules - nonredundant
@@ -195,18 +160,21 @@ all_non_redundant %>%
   geom_boxplot(outlier.shape = "cross", outlier.color = "red") + 
   geom_jitter(height = 0, width = 0.1, col = "grey") +
   theme_classic() + 
+  theme(axis.title.x = element_blank())+
   labs(y = "Confidence"),
 all_non_redundant %>% 
   ggplot(aes(Metric, lift)) + 
   geom_boxplot(outlier.shape = "cross", outlier.color = "red") +
   geom_jitter(height = 0, width = 0.1, col = "grey") +
   theme_classic() + 
+  theme(axis.title.x = element_blank())+
   labs(y = "Lift"),
 all_non_redundant %>% 
   ggplot(aes(Metric, conviction)) + 
   geom_boxplot(outlier.shape = "cross", outlier.color = "red") + 
   geom_jitter(height = 0, width = 0.1, col = "grey") +
-  theme_classic() + 
+  theme_classic() +
+  theme(axis.title.x = element_blank())+
   labs(y = "Conviction"), ncol = 3)
 
 
