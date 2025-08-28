@@ -30,6 +30,7 @@ emose_rules_df %>%
   mutate(Dependence = ifelse(chi_p_adj <0.05, "Dependent", "Independent")) %>%
   pull(Dependence) %>% table()
 
+
 #
 ## Step 2 - remove redundant rules
 # Calculate Mutual information and Improvement
@@ -73,9 +74,12 @@ emose_rules_dependent %>%
   mutate(RHS = str_remove(RHS, "\\{Classification="),
          RHS = str_remove(RHS, "\\}")) %>% 
   mutate(RHS = factor(RHS, levels = c("Rare", "Undetermined", "Abundant"))) %>% 
+  mutate(Metric = str_to_title(Metric)) %>%
   ggplot(aes(RHS, Score)) + 
   geom_boxplot() + 
   theme_classic() +
+  theme(strip.text = element_text(size = 12),
+        axis.title = element_text(size = 12)) +
   facet_wrap(~Metric, scales = "free")+
   labs(x = "Consequent") 
 
@@ -83,13 +87,15 @@ emose_rules_dependent %>%
 ## dependent rules - nonredundant
 # key items are in taxonomy var
 # Remove redundancy by Improvement
-dependent_rules_non_redundant <- 
-  emose_rules_dependent %>% 
+dependent_rules_non_redundant <- emose_rules_dependent %>% 
   DATAFRAME() %>% 
   filter(str_detect(LHS, "taxa")) %>%  # remove rules without key items
   separate_wider_delim(LHS, ",", names = "taxa", too_many = "debug") %>% 
   select(-LHS_ok, -LHS_pieces) %>% 
-  mutate(taxa = factor(str_remove(taxa, "\\{taxa="))) %>%  
+  mutate(taxa = factor(str_remove(taxa, "\\{taxa=")),
+         taxa = str_remove(taxa, "\\}"),
+         taxa = str_remove(taxa, ","),
+         taxa = factor(taxa)) %>% 
   group_by(taxa) %>% 
   arrange(desc(improvement)) %>% 
   slice_head(n = 1) %>% 

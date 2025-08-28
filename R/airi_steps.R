@@ -46,9 +46,8 @@ quality(full_rules_dependent) %>%
   mutate(Metric = ifelse(Metric == "mutualInfo", "Mutual Information", "Improvement")) %>% 
   ggplot(aes(conviction, 
              confidence, 
-             col = lift,
-             size = Score)) + 
-  geom_point() + 
+             col = lift)) + 
+  geom_point(size = 2) + 
   scale_color_gradient(low = reds[1], high = reds[9]) + 
   theme_classic() + 
   facet_grid(~Metric) + 
@@ -73,11 +72,14 @@ full_rules_dependent %>%
   mutate(RHS = str_remove(RHS, "\\{Classification="),
          RHS = str_remove(RHS, "\\}")) %>% 
   mutate(RHS = factor(RHS, levels = c("Rare", "Undetermined", "Abundant"))) %>% 
+  mutate(Metric = str_to_title(Metric)) %>% 
   ggplot(aes(RHS, Score)) + 
   geom_boxplot() + 
   theme_classic() +
+  theme(strip.text = element_text(size = 12),
+        axis.title = element_text(size = 12)) + 
   facet_wrap(~Metric, scales = "free")+
-  labs(y = "Lift",
+  labs(y = "Score",
        x = "Consequent") 
 
 
@@ -90,7 +92,10 @@ dependent_rules_non_redundant <-
   filter(str_detect(LHS, "taxon")) %>%  # remove rules without key items
   separate_wider_delim(LHS, ",", names = "taxon", too_many = "debug") %>% 
   select(-LHS_ok, -LHS_pieces) %>% 
-  mutate(taxon = factor(str_remove(taxon, "\\{taxon="))) %>%  
+  mutate(taxon = factor(str_remove(taxon, "\\{taxon=")),
+         taxon = str_remove(taxon, "\\}"),
+         taxon = str_remove(taxon, ","),
+         taxon = factor(taxon)) %>%  
   group_by(taxon) %>% 
   arrange(desc(improvement)) %>% 
   slice_head(n = 1) %>% 
