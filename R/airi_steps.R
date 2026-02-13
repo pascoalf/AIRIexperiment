@@ -162,21 +162,21 @@ all_non_redundant <-
 gridExtra::grid.arrange(
 all_non_redundant %>% 
   ggplot(aes(Metric, confidence)) + 
-  geom_boxplot(outlier.shape = "cross", outlier.color = "red") + 
+  geom_boxplot(outliers = FALSE) + 
   geom_jitter(height = 0, width = 0.1, col = "grey") +
   theme_classic() + 
   theme(axis.title.x = element_blank())+
   labs(y = "Confidence"),
 all_non_redundant %>% 
   ggplot(aes(Metric, lift)) + 
-  geom_boxplot(outlier.shape = "cross", outlier.color = "red") +
+  geom_boxplot(outliers = FALSE) +
   geom_jitter(height = 0, width = 0.1, col = "grey") +
   theme_classic() + 
   theme(axis.title.x = element_blank())+
   labs(y = "Lift"),
 all_non_redundant %>% 
   ggplot(aes(Metric, conviction)) + 
-  geom_boxplot(outlier.shape = "cross", outlier.color = "red") + 
+  geom_boxplot(outliers = FALSE) + 
   geom_jitter(height = 0, width = 0.1, col = "grey") +
   theme_classic() +
   theme(axis.title.x = element_blank())+
