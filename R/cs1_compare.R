@@ -23,17 +23,21 @@ lift.1_all <- get_rules_by(full_rules, metric = "lift", score = 1)
 lift.1_dep <- get_rules_by(full_rules_dependent, metric = "lift", score = 1)
 lift.10_all <- get_rules_by(full_rules, metric = "lift", score = 10)
 lift.10_dep <- get_rules_by(full_rules_dependent, metric = "lift", score = 10)
+conv.5_all <- get_rules_by(full_rules, metric = "conviction", score = 5)
+conv.5_dep <- get_rules_by(full_rules_dependent, metric = "conviction", score = 5)
+conv.10_all <- get_rules_by(full_rules, metric = "conviction", score = 10) 
+conv.10_dep <- get_rules_by(full_rules_dependent, metric = "conviction", score = 10)
 
 # After threshold, if they are a lot, arrange by some other metric
 # Merge as a single data frame
 conf.90_all.df <- conf.90_all %>% 
   DATAFRAME() %>% 
-  mutate(method = "Conf. = 90%",
+  mutate(method = "Conf. \U2265 90%",
          subset = "from all rules") %>% 
   select(!chi_p_adj)
 conf.90_dep.df <- conf.90_dep %>% 
   DATAFRAME() %>% 
-  mutate(method = "Conf. = 90%",
+  mutate(method = "Conf. \U2265 90%",
          subset = "from dependent rules") %>% 
   select(!chi_p_adj)
 conf.100_all.df <- conf.100_all %>% 
@@ -48,25 +52,44 @@ conf.100_dep.df <- conf.100_dep %>%
   select(!chi_p_adj)
 lift.1_all.df <- lift.1_all %>% 
   DATAFRAME() %>% 
-  mutate(method = "Lift > 1",
+  mutate(method = "Lift \U2265 1",
          subset = "from all rules") %>% 
   select(!chi_p_adj)
 lift.1_dep.df <- lift.1_dep %>% 
   DATAFRAME() %>% 
-  mutate(method = "Lift > 1",
+  mutate(method = "Lift \U2265 1",
          subset = "from dependent rules") %>% 
   select(!chi_p_adj)
 lift.10_all.df <- lift.10_all %>% 
   DATAFRAME() %>% 
-  mutate(method = "Lift > 10",
+  mutate(method = "Lift \U2265 10",
          subset = "from all rules") %>% 
   select(!chi_p_adj)
 lift.10_dep.df <- lift.10_dep %>% 
   DATAFRAME() %>% 
-  mutate(method = "Lift > 10",
+  mutate(method = "Lift \U2265 10",
          subset = "from dependent rules") %>% 
   select(!chi_p_adj)
-
+conv.5_all.df <- conv.5_all %>% 
+  DATAFRAME() %>% 
+  mutate(method = "Conv. \U2265 5",
+         subset = "from all rules") %>% 
+  select(!chi_p_adj)
+conv.5_dep.df <- conv.5_dep %>% 
+  DATAFRAME() %>% 
+  mutate(method = "Conv. \U2265 5",
+         subset = "from dependent rules") %>% 
+  select(!chi_p_adj)
+conv.10_all.df <- conv.10_all %>% 
+  DATAFRAME() %>% 
+  mutate(method = "Conv. \U2265 10",
+         subset = "from all rules") %>% 
+  select(!chi_p_adj)
+conv.10_dep.df <- conv.10_dep %>% 
+  DATAFRAME() %>% 
+  mutate(method = "Conv. \U2265 10",
+         subset = "from dependent rules") %>% 
+  select(!chi_p_adj)
 #
 airi_mosj_dep <- non_redundant_by_mutualInfo %>% 
   select(!Metric) %>% mutate(method = "AIRI", subset = "from dependent rules")
@@ -95,13 +118,21 @@ multi_options_cs1 <- airi_mosj_dep %>%
   rbind(full_rules_df.temp) %>% 
   rbind(full_rules_dependent_df.temp) %>% 
   rbind(lift.10_all.df) %>% 
-  rbind(lift.10_dep.df)
+  rbind(lift.10_dep.df) %>% 
+  rbind(conv.10_dep.df) %>% 
+  rbind(conv.5_dep.df) %>% 
+  rbind(conv.10_all.df) %>% 
+  rbind(conv.5_all.df)%>% 
+  mutate(method = factor(method, 
+                         levels = c("None", "AIRI",
+                                    "Conf. = 90%", "Conf. = 100%", 
+                                    "Lift > 1", "Lift > 10",
+                                    "Conv. ≥ 10", "Conv. ≥ 5")))
 
 #
 count_mosj_rules <- multi_options_cs1 %>% 
   group_by(method, subset) %>% 
-  count() 
-
+  count()
 count_mosj_rules %>% 
   ggplot(aes(method, n , fill = subset)) + 
   geom_col(position = "dodge") + 
@@ -111,8 +142,28 @@ count_mosj_rules %>%
   labs(y = "Number of rules (Log10 scale)",
        x = "Method",
        fill = "Subset")
-  
 
+# mutual information 
+multi_options_cs1 %>% 
+  ggplot(aes(method, improvement, col = subset)) + 
+  stat_summary()+ 
+  theme_classic() + 
+  theme(legend.position = "top") +
+  labs(y = "Improvement (mean \U2213 sd)",
+       x = "Method",
+       col = "Subset")
+#
+multi_options_cs1 %>% 
+  ggplot(aes(method, mutualInfo, col = subset)) + 
+  stat_summary()+ 
+  theme_classic() + 
+  theme(legend.position = "top") +
+  labs(y = "Mutual Information (mean \U2213 sd)",
+       x = "Method",
+       col = "Subset")
+
+## From previous, look deeper at best methods
+## best methods: Conf100; Conv10; Conv5; Lift10 
 
 
 # Summarise
