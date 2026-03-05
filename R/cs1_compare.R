@@ -21,16 +21,106 @@ conf.100_all <- get_rules_by(full_rules, metric = "confidence", score = 1)
 conf.100_dep <- get_rules_by(full_rules_dependent, metric = "confidence", score = 1)
 lift.1_all <- get_rules_by(full_rules, metric = "lift", score = 1)
 lift.1_dep <- get_rules_by(full_rules_dependent, metric = "lift", score = 1)
+lift.10_all <- get_rules_by(full_rules, metric = "lift", score = 10)
+lift.10_dep <- get_rules_by(full_rules_dependent, metric = "lift", score = 10)
 
 # After threshold, if they are a lot, arrange by some other metric
+# Merge as a single data frame
+conf.90_all.df <- conf.90_all %>% 
+  DATAFRAME() %>% 
+  mutate(method = "Conf. = 90%",
+         subset = "from all rules") %>% 
+  select(!chi_p_adj)
+conf.90_dep.df <- conf.90_dep %>% 
+  DATAFRAME() %>% 
+  mutate(method = "Conf. = 90%",
+         subset = "from dependent rules") %>% 
+  select(!chi_p_adj)
+conf.100_all.df <- conf.100_all %>% 
+  DATAFRAME() %>% 
+  mutate(method = "Conf. = 100%",
+         subset = "from all rules") %>% 
+  select(!chi_p_adj)
+conf.100_dep.df <- conf.100_dep %>% 
+  DATAFRAME() %>% 
+  mutate(method = "Conf. = 100%",
+         subset = "from dependent rules") %>% 
+  select(!chi_p_adj)
+lift.1_all.df <- lift.1_all %>% 
+  DATAFRAME() %>% 
+  mutate(method = "Lift > 1",
+         subset = "from all rules") %>% 
+  select(!chi_p_adj)
+lift.1_dep.df <- lift.1_dep %>% 
+  DATAFRAME() %>% 
+  mutate(method = "Lift > 1",
+         subset = "from dependent rules") %>% 
+  select(!chi_p_adj)
+lift.10_all.df <- lift.10_all %>% 
+  DATAFRAME() %>% 
+  mutate(method = "Lift > 10",
+         subset = "from all rules") %>% 
+  select(!chi_p_adj)
+lift.10_dep.df <- lift.10_dep %>% 
+  DATAFRAME() %>% 
+  mutate(method = "Lift > 10",
+         subset = "from dependent rules") %>% 
+  select(!chi_p_adj)
 
-## Summarise 
+#
+airi_mosj_dep <- non_redundant_by_mutualInfo %>% 
+  select(!Metric) %>% mutate(method = "AIRI", subset = "from dependent rules")
+
+# Add original rules
+quality(full_rules)$mutualInfo = interestMeasure(full_rules, "mutualInfo")
+quality(full_rules)$improvement = interestMeasure(full_rules, "improvement")
+full_rules_df.temp <- DATAFRAME(full_rules)
+full_rules_df.temp <- full_rules_df.temp %>% 
+  select(!chi_p_adj) %>% 
+  mutate(method = "None", subset = "from all rules")
+# Add dependent rules
+full_rules_dependent_df.temp <- DATAFRAME(full_rules_dependent)
+full_rules_dependent_df.temp <- full_rules_dependent_df.temp %>% 
+  select(!chi_p_adj) %>% 
+  mutate(method = "None", subset = "from dependent rules")
+
+#
+multi_options_cs1 <- airi_mosj_dep %>% 
+  rbind(conf.90_all.df) %>% 
+  rbind(conf.90_dep.df) %>% 
+  rbind(conf.100_all.df) %>% 
+  rbind(conf.100_dep.df) %>% 
+  rbind(lift.1_all.df) %>% 
+  rbind(lift.1_dep.df) %>% 
+  rbind(full_rules_df.temp) %>% 
+  rbind(full_rules_dependent_df.temp) %>% 
+  rbind(lift.10_all.df) %>% 
+  rbind(lift.10_dep.df)
+
+#
+count_mosj_rules <- multi_options_cs1 %>% 
+  group_by(method, subset) %>% 
+  count() 
+
+count_mosj_rules %>% 
+  ggplot(aes(method, n , fill = subset)) + 
+  geom_col(position = "dodge") + 
+  scale_y_log10() + 
+  theme_classic() + 
+  theme(legend.position = "top") +
+  labs(y = "Number of rules (Log10 scale)",
+       x = "Method",
+       fill = "Subset")
+  
+
+
+
+# Summarise
 
 
 
 
-
-## could we also add a network???
+# could we also add a network???
 
 
 
