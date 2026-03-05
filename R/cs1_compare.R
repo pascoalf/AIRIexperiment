@@ -90,9 +90,18 @@ conv.10_dep.df <- conv.10_dep %>%
   mutate(method = "Conv. \U2265 10",
          subset = "from dependent rules") %>% 
   select(!chi_p_adj)
-#
-airi_mosj_dep <- non_redundant_by_mutualInfo %>% 
-  select(!Metric) %>% mutate(method = "AIRI", subset = "from dependent rules")
+
+# airi - by improv
+airi_mosj_dep_imp <- dependent_rules_non_redundant %>% 
+  select(!Metric) %>% mutate(method = "AIRI \n by improvement", subset = "from dependent rules")
+
+# airi - by mutual information
+airi_mosj_dep_mi <- non_redundant_by_mutualInfo %>% 
+  select(!Metric) %>% mutate(method = "AIRI \n by mutualInfo", subset = "from dependent rules")
+
+# airi - by complexity
+airi_mosj_dep_comp <- non_redundant_by_complexity %>% 
+  select(!Metric) %>% mutate(method = "AIRI \n by complexity", subset = "from dependent rules")
 
 # Add original rules
 quality(full_rules)$mutualInfo = interestMeasure(full_rules, "mutualInfo")
@@ -108,7 +117,9 @@ full_rules_dependent_df.temp <- full_rules_dependent_df.temp %>%
   mutate(method = "None", subset = "from dependent rules")
 
 #
-multi_options_cs1 <- airi_mosj_dep %>% 
+multi_options_cs1 <- airi_mosj_dep_comp %>% 
+  rbind(airi_mosj_dep_imp) %>%
+  rbind(airi_mosj_dep_mi) %>% 
   rbind(conf.90_all.df) %>% 
   rbind(conf.90_dep.df) %>% 
   rbind(conf.100_all.df) %>% 
@@ -124,7 +135,10 @@ multi_options_cs1 <- airi_mosj_dep %>%
   rbind(conv.10_all.df) %>% 
   rbind(conv.5_all.df)%>% 
   mutate(method = factor(method, 
-                         levels = c("None", "AIRI",
+                         levels = c("None", 
+                                    "AIRI \n by improvement",
+                                    "AIRI \n by mutualInfo",
+                                    "AIRI \n by complexity",
                                     "Conf. = 90%", "Conf. = 100%", 
                                     "Lift > 1", "Lift > 10",
                                     "Conv. ≥ 10", "Conv. ≥ 5")))
@@ -154,13 +168,16 @@ multi_options_cs1 %>%
        col = "Subset")
 #
 multi_options_cs1 %>% 
-  ggplot(aes(method, mutualInfo, col = subset)) + 
-  stat_summary()+ 
+  ggplot(aes(method, mutualInfo, fill = subset)) + 
+  geom_boxplot(outlier.alpha = 0.5)+ 
   theme_classic() + 
   theme(legend.position = "top") +
   labs(y = "Mutual Information (mean \U2213 sd)",
        x = "Method",
        col = "Subset")
+
+
+
 
 ## From previous, look deeper at best methods
 ## best methods: Conf100; Conv10; Conv5; Lift10 
