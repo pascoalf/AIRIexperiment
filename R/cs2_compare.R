@@ -94,15 +94,15 @@ cs2.conv.5_dep.df <- cs2.conv.5_dep %>%
   select(!chi_p_adj)
 
 # airi - by improv
-cs2.airi_mosj_dep_imp <- emose_dependent_rules_non_redundant %>% 
+cs2.airi_emose_dep_imp <- emose_dependent_rules_non_redundant %>% 
   select(!Metric) %>% mutate(method = "AIRI \n by improvement", subset = "from dependent rules")
 
 # airi - by mutual information
-cs2.airi_mosj_dep_mi <- emose_non_redundant_by_mutualInfo %>% 
+cs2.airi_emose_dep_mi <- emose_non_redundant_by_mutualInfo %>% 
   select(!Metric) %>% mutate(method = "AIRI \n by mutualInfo", subset = "from dependent rules")
 
 # airi - by complexity
-cs2.airi_mosj_dep_comp <- emose_non_redundant_by_complexity %>% 
+cs2.airi_emose_dep_comp <- emose_non_redundant_by_complexity %>% 
   select(!Metric) %>% mutate(method = "AIRI \n by complexity", subset = "from dependent rules")
 
 # Add original rules
@@ -119,9 +119,9 @@ cs2.emose_rules_dependent_df.temp <- cs2.emose_rules_dependent_df.temp %>%
   mutate(method = "None", subset = "from dependent rules")
 
 #
-multi_options_cs2 <- cs2.airi_mosj_dep_comp %>% 
-  rbind(cs2.airi_mosj_dep_imp) %>%
-  rbind(cs2.airi_mosj_dep_mi) %>% 
+multi_options_cs2 <- cs2.airi_emose_dep_comp %>% 
+  rbind(cs2.airi_emose_dep_imp) %>%
+  rbind(cs2.airi_emose_dep_mi) %>% 
   rbind(cs2.conf.90_all.df) %>% 
   rbind(cs2.conf.90_dep.df) %>% 
   rbind(cs2.conf.100_all.df) %>% 
@@ -146,11 +146,11 @@ multi_options_cs2 <- cs2.airi_mosj_dep_comp %>%
                                     "Conv. \U2265 5", "Conv. \U2265 1")))
 
 #
-cs2.count_mosj_rules <- multi_options_cs2 %>% 
+cs2.count_emose_rules <- multi_options_cs2 %>% 
   group_by(method, subset) %>% 
   count()
 #
-cs2.count_mosj_rules %>% 
+cs2.count_emose_rules %>% 
   ggplot(aes(method, n , fill = subset)) + 
   geom_col(position = "dodge") + 
   scale_y_log10() + 
