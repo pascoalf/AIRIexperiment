@@ -87,7 +87,7 @@ emose_rules_dependent %>%
 ## dependent rules - nonredundant
 # key items are in taxonomy var
 # Remove redundancy by Improvement
-dependent_rules_non_redundant <- emose_rules_dependent %>% 
+emose_dependent_rules_non_redundant <- emose_rules_dependent %>% 
   DATAFRAME() %>% 
   filter(str_detect(LHS, "taxa")) %>%  # remove rules without key items
   separate_wider_delim(LHS, ",", names = "taxa", too_many = "debug") %>% 
@@ -102,10 +102,10 @@ dependent_rules_non_redundant <- emose_rules_dependent %>%
   ungroup() %>% 
   select(LHS, RHS, support,	confidence, coverage,	lift,	count,	conviction,	mutualInfo,	improvement) 
 
-dependent_rules_non_redundant %>% View()
+#emose_dependent_rules_non_redundant %>% View()
 
 ## remove redundancy by Complexity
-non_redundant_by_complexity <- 
+emose_non_redundant_by_complexity <- 
   emose_rules_dependent %>%
   DATAFRAME() %>% 
   mutate(LHSsize = str_count(LHS, ",")) %>% 
@@ -124,10 +124,10 @@ non_redundant_by_complexity <-
   filter(str_detect(LHS, "taxa")) %>% # to focus only on LHS with taxonomy
   arrange(desc(conviction))
 
-non_redundant_by_complexity %>% View()
+#emose_non_redundant_by_complexity %>% View()
 
 ## remove redundancy by mutual information
-non_redundant_by_mutualInfo <- 
+emose_non_redundant_by_mutualInfo <- 
   emose_rules_dependent %>%
   DATAFRAME() %>% 
   filter(str_detect(LHS, "taxa")) %>%  # remove rules without key items
@@ -145,39 +145,39 @@ non_redundant_by_mutualInfo <-
   filter(str_detect(LHS, "taxa")) %>% # to focus only on LHS with taxaomy
   arrange(desc(conviction))
 
-non_redundant_by_mutualInfo %>% View()
+#emose_non_redundant_by_mutualInfo %>% View()
 
 
 ## idea: summarise metrics by method to solve non-redundant rules --> what method obtained highest conviction?
-non_redundant_by_mutualInfo$Metric <- "Mutual\ninformation"
-non_redundant_by_complexity$Metric <- "Complexity"
-dependent_rules_non_redundant$Metric <-"Improvement"   
+emose_non_redundant_by_mutualInfo$Metric <- "Mutual\ninformation"
+emose_non_redundant_by_complexity$Metric <- "Complexity"
+emose_dependent_rules_non_redundant$Metric <-"Improvement"   
 
-all_non_redundant <- 
-  rbind(non_redundant_by_mutualInfo,
-        non_redundant_by_complexity,
-        dependent_rules_non_redundant) %>% 
+emose_all_non_redundant <- 
+  rbind(emose_non_redundant_by_mutualInfo,
+        emose_non_redundant_by_complexity,
+        emose_dependent_rules_non_redundant) %>% 
   mutate(Classification = case_when(str_detect(RHS, "Abundant") ~ "Abundant",
                                     str_detect(RHS, "Undetermined") ~ "Undetermined",
                                     str_detect(RHS, "Rare") ~ "Rare")) 
 
 
 gridExtra::grid.arrange(
-  all_non_redundant %>% 
+  emose_all_non_redundant %>% 
     ggplot(aes(Metric, confidence)) + 
     geom_boxplot(outlier.shape = NA) + 
     geom_jitter(height = 0, width = 0.1, col = "grey") +
     theme_classic() + 
     theme(axis.title.x = element_blank())+
     labs(y = "Confidence"),
-  all_non_redundant %>% 
+  emose_all_non_redundant %>% 
     ggplot(aes(Metric, lift)) + 
     geom_boxplot(outlier.shape = NA) +
     geom_jitter(height = 0, width = 0.1, col = "grey") +
     theme_classic() + 
     theme(axis.title.x = element_blank())+
     labs(y = "Lift"),
-  all_non_redundant %>% 
+  emose_all_non_redundant %>% 
     ggplot(aes(Metric, conviction)) + 
     geom_boxplot(outlier.shape = NA) + 
     geom_jitter(height = 0, width = 0.1, col = "grey") +
@@ -187,15 +187,15 @@ gridExtra::grid.arrange(
 
 
 # percent shared rules
-shared_rules <- all_non_redundant %>% 
+emose_shared_rules <- emose_all_non_redundant %>% 
   mutate(rule = paste(LHS, "->",RHS)) %>% 
   select(rule, Metric) %>% 
   distinct()
 
 # venn diagram
-ggVennDiagram(x = list(non_redundant_by_mutualInfo$LHS,
-                       non_redundant_by_complexity$LHS,
-                       dependent_rules_non_redundant$LHS),
+ggVennDiagram(x = list(emose_non_redundant_by_mutualInfo$LHS,
+                       emose_non_redundant_by_complexity$LHS,
+                       emose_dependent_rules_non_redundant$LHS),
               category.names = c("Mutual\nInformation",
                                  "Complexity",
                                  "Improvement"),
@@ -208,9 +208,9 @@ ggVennDiagram(x = list(non_redundant_by_mutualInfo$LHS,
 
 
 ## save non redundant rules for inspection
-non_redundant_by_mutualInfo %>% write.csv("output/Rd_mutual_info_case2.csv")
-non_redundant_by_complexity %>% write.csv("output/Rd_complex_case2.csv")
-dependent_rules_non_redundant %>% write.csv("output/Rd_improv_case2.csv")
+emose_non_redundant_by_mutualInfo %>% write.csv("output/Rd_mutual_info_case2.csv")
+emose_non_redundant_by_complexity %>% write.csv("output/Rd_complex_case2.csv")
+emose_dependent_rules_non_redundant %>% write.csv("output/Rd_improv_case2.csv")
 
 
 
