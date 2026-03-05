@@ -139,9 +139,9 @@ multi_options_cs1 <- airi_mosj_dep_comp %>%
                                     "AIRI \n by improvement",
                                     "AIRI \n by mutualInfo",
                                     "AIRI \n by complexity",
-                                    "Conf. = 90%", "Conf. = 100%", 
-                                    "Lift > 1", "Lift > 10",
-                                    "Conv. ≥ 10", "Conv. ≥ 5")))
+                                    "Conf. \U2265 90%", "Conf. = 100%", 
+                                    "Lift \U2265 1", "Lift \U2265 10",
+                                    "Conv. \U2265 10", "Conv. \U2265 5")))
 
 #
 count_mosj_rules <- multi_options_cs1 %>% 
@@ -159,13 +159,13 @@ count_mosj_rules %>%
 
 # mutual information 
 multi_options_cs1 %>% 
-  ggplot(aes(method, improvement, col = subset)) + 
-  stat_summary()+ 
+  ggplot(aes(method, improvement, fill = subset)) + 
+  geom_boxplot(outlier.alpha = 0.5)+ 
   theme_classic() + 
   theme(legend.position = "top") +
   labs(y = "Improvement (mean \U2213 sd)",
        x = "Method",
-       col = "Subset")
+       fill = "Subset")
 #
 multi_options_cs1 %>% 
   ggplot(aes(method, mutualInfo, fill = subset)) + 
@@ -174,21 +174,13 @@ multi_options_cs1 %>%
   theme(legend.position = "top") +
   labs(y = "Mutual Information (mean \U2213 sd)",
        x = "Method",
-       col = "Subset")
-
-
-
+       fill = "Subset")
 
 ## From previous, look deeper at best methods
-## best methods: Conf100; Conv10; Conv5; Lift10 
-
-
-# Summarise
+## Best methods: AIRI; Conf100; Conv10; Conv5; Lift10 
 
 
 
-
-# could we also add a network???
 
 
 
