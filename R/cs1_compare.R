@@ -238,5 +238,3 @@ redund_df %>%
        x = "Method",
        fill = "Subset")
 
-
-
