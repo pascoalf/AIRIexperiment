@@ -78,12 +78,14 @@ grid.arrange(
     scale_y_log10() +
     labs(y = "Number of rules (Log10)",
          x = "Score",
-         col = "Subset") + 
+         col = "Subset", tag = "a") + 
     theme_bw() + 
     theme(panel.grid = element_blank(),
           legend.position = "top",
           strip.background = element_blank(),
-          strip.text = element_text(size = 12)),
+          strip.text = element_text(size = 12),
+          axis.text = element_text(size = 11),
+          axis.title = element_text(size = 12)),
 #
   cs1_redund %>% 
   mutate(redundancy = redundancy*100) %>% 
@@ -93,14 +95,16 @@ grid.arrange(
   geom_line(aes(group = subset), col = "grey20") +
   #scale_y_log10() + 
   facet_wrap(~metric, scale = "free") +
-  labs(y = "Redundancy",
+  labs(y = "Redundancy (%)",
        x = "Score",
-       col = "Subset") + 
+       col = "Subset", tag = "b") + 
   theme_bw() + 
   theme(panel.grid = element_blank(),
         legend.position = "top",
         strip.background = element_blank(),
-        strip.text = element_text(size = 12)))
+        strip.text = element_text(size = 12),
+        axis.text = element_text(size = 11),
+        axis.title = element_text(size = 12)))
 
 grid.arrange(
   #
@@ -114,12 +118,15 @@ grid.arrange(
     scale_y_log10() +
     labs(y = "Number of rules (Log10)",
          x = "Score",
-         col = "Subset") + 
+         col = "Subset",
+         tag = "b") + 
     theme_bw() + 
     theme(panel.grid = element_blank(),
           legend.position = "top",
           strip.background = element_blank(),
-          strip.text = element_text(size = 12)),
+          strip.text = element_text(size = 12),
+          axis.text = element_text(size = 11),
+          axis.title = element_text(size = 12)),
   #
   cs1_redund %>% 
     mutate(redundancy = redundancy*100) %>% 
@@ -129,11 +136,14 @@ grid.arrange(
     geom_line(aes(group = subset), col = "grey20") +
     scale_y_log10() + 
     facet_wrap(~metric, scale = "free") +
-    labs(y = "Redundancy (Log10)",
+    labs(y = "Redundancy (%) (Log10)",
          x = "Score",
-         col = "Subset") + 
+         col = "Subset",
+         tag = "b") + 
     theme_bw() + 
     theme(panel.grid = element_blank(),
           legend.position = "top",
           strip.background = element_blank(),
-          strip.text = element_text(size = 12)))
+          strip.text = element_text(size = 12),
+          axis.text = element_text(size = 11),
+          axis.title = element_text(size = 12)))

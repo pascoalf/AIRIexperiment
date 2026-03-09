@@ -152,53 +152,16 @@ count_mosj_rules %>%
   geom_col(position = "dodge") + 
   scale_y_log10() + 
   theme_classic() + 
-  theme(legend.position = "top") +
+  theme(legend.position = "top",
+        axis.text.x = element_text(size = 12, angle = 45, vjust = 0.7),
+        axis.text.y = element_text(size = 12),
+        legend.text = element_text(size = 12),
+        legend.title = element_text(size = 12),
+        axis.title = element_text(size =12)) +
   labs(y = "Number of rules (Log10 scale)",
        x = "Method",
-       fill = "Subset")
-
-# mutual information 
-multi_options_cs1 %>% 
-  ggplot(aes(method, improvement, fill = subset)) + 
-  geom_boxplot(outlier.alpha = 0.5)+ 
-  theme_classic() + 
-  theme(legend.position = "top") +
-  labs(y = "Improvement (mean \U2213 sd)",
-       x = "Method",
-       fill = "Subset")
-#
-multi_options_cs1 %>% 
-  ggplot(aes(method, mutualInfo, fill = subset)) + 
-  geom_boxplot(outlier.alpha = 0.5)+ 
-  theme_classic() + 
-  theme(legend.position = "top") +
-  labs(y = "Mutual Information (mean \U2213 sd)",
-       x = "Method",
-       fill = "Subset")
-
-## From previous, look deeper at best methods
-## Best methods: AIRI; Conf100; Conv10; Conv5; Lift10 
-
-#
-airi_mosj_dep_mi
-conf.100_dep.df %>% View()
-lift.10_dep.df %>% View()
-conv.5_dep.df %>% View()
-
-## test redundacy measure
-redundant_count_lift.10_dep.df <- lift.10_dep.df%>% 
-  separate_wider_delim(LHS, ",", names = "taxon", too_many = "debug") %>% 
-  select(-LHS_ok, -LHS_pieces) %>% 
-  mutate(taxon = str_remove(taxon, "\\{taxon="),
-         taxon = str_remove(taxon, "\\}"),
-         taxon = str_remove(taxon, ","),
-         taxon = factor(taxon)) %>% 
-  group_by(taxon) %>% 
-  count() %>% 
-  filter(n > 1)
-
-#
-sum(redundant_count_lift.10_dep.df$n)*100/11
+       fill = "Subset",
+       tag = "Case study 1")
 
 ## make function to calculate redundancy
 
@@ -237,4 +200,5 @@ redund_df %>%
   labs(y = "Redundancy (%)", 
        x = "Method",
        fill = "Subset")
+#
 

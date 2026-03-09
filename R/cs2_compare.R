@@ -28,7 +28,7 @@ cs2.lift.10_dep <- get_rules_by(emose_rules_dependent, metric = "lift", score = 
 cs2.conv.1_all <- get_rules_by(emose_rules, metric = "conviction", score = 1)
 cs2.conv.1_dep <- get_rules_by(emose_rules_dependent, metric = "conviction", score = 5)
 cs2.conv.5_all <- get_rules_by(emose_rules, metric = "conviction", score = 5) 
-cs2.conv.5_dep <- get_rules_by(emose_rules_dependent, metric = "conviction", score = 10)
+cs2.conv.5_dep <- get_rules_by(emose_rules_dependent, metric = "conviction", score = 5)
 
 # After threshold, if they are a lot, arrange by some other metric
 # Merge as a single data frame
@@ -160,15 +160,6 @@ cs2.count_emose_rules %>%
        x = "Method",
        fill = "Subset")
 
-# mutual information 
-multi_options_cs2 %>% 
-  ggplot(aes(method, improvement, fill = subset)) + 
-  geom_boxplot(outlier.alpha = 0.5)+ 
-  theme_classic() + 
-  theme(legend.position = "top") +
-  labs(y = "Improvement (mean \U2213 sd)",
-       x = "Method",
-       fill = "Subset")
 #
 multi_options_cs2 %>% 
   ggplot(aes(method, mutualInfo, fill = subset)) + 
@@ -179,6 +170,21 @@ multi_options_cs2 %>%
        x = "Method",
        fill = "Subset")
 
-## From previous, look deeper at best methods
-## Best methods: AIRI; Conf100; Conv10; Conv5; Lift10 
+# calculate redundancy
+# Calc redundancy for all
+redund_df_cs2 <- multi_options_cs2 %>% 
+  group_by(method, subset) %>% 
+  nest() %>% 
+  mutate(redundancy = map(.x = data, .f = ~redundancy(.x))) %>% 
+  unnest(redundancy)
+
+redund_df_cs2 %>% 
+  mutate(redundancy = 100*redundancy) %>% 
+  ggplot(aes(method, redundancy, fill = subset)) +
+  geom_col(position = "dodge") + 
+  theme_classic() + 
+  theme(legend.position = "top") + 
+  labs(y = "Redundancy (%)", 
+       x = "Method",
+       fill = "Subset")
 
