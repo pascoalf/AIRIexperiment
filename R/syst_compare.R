@@ -71,8 +71,8 @@ grid.arrange(
   cs1_nrules %>% 
     mutate(metric = str_to_title(metric)) %>% 
     ggplot(aes(score, nrules, col = subset)) + 
-    geom_line(aes(group = subset)) +
-    geom_point() + 
+    geom_point(alpha = 0.55) + 
+    geom_line(aes(group = subset), col = "grey20") +
     geom_hline(yintercept = 1, lty = "dashed", col = "grey") +
     facet_wrap(~metric, scale = "free") +
     scale_y_log10() +
@@ -89,10 +89,11 @@ grid.arrange(
   mutate(redundancy = redundancy*100) %>% 
   mutate(metric = str_to_title(metric)) %>% 
   ggplot(aes(score, redundancy, col = subset)) + 
-  geom_line(aes(group = subset)) +
-  geom_point() + 
+  geom_point(alpha = 0.55) + 
+  geom_line(aes(group = subset), col = "grey20") +
+  #scale_y_log10() + 
   facet_wrap(~metric, scale = "free") +
-  labs(y = "Redundancy",
+  labs(y = "Redundancy (Log10)",
        x = "Score",
        col = "Subset") + 
   theme_bw() + 
