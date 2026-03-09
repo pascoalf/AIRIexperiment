@@ -89,7 +89,7 @@ grid.arrange(
     ggplot(aes(score, redundancy, col = subset)) + 
     geom_point(alpha = 0.25) + 
     geom_line(aes(group = subset), col = "grey20") +
-#    scale_y_log10() + 
+    scale_y_log10() + 
     facet_wrap(~metric, scale = "free") +
     labs(y = "Redundancy (Log10)",
          x = "Score",

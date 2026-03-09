@@ -93,7 +93,7 @@ grid.arrange(
   geom_line(aes(group = subset), col = "grey20") +
   #scale_y_log10() + 
   facet_wrap(~metric, scale = "free") +
-  labs(y = "Redundancy (Log10)",
+  labs(y = "Redundancy",
        x = "Score",
        col = "Subset") + 
   theme_bw() + 
@@ -102,3 +102,38 @@ grid.arrange(
         strip.background = element_blank(),
         strip.text = element_text(size = 12)))
 
+grid.arrange(
+  #
+  cs1_nrules %>% 
+    mutate(metric = str_to_title(metric)) %>% 
+    ggplot(aes(score, nrules, col = subset)) + 
+    geom_point(alpha = 0.55) + 
+    geom_line(aes(group = subset), col = "grey20") +
+    geom_hline(yintercept = 1, lty = "dashed", col = "grey") +
+    facet_wrap(~metric, scale = "free") +
+    scale_y_log10() +
+    labs(y = "Number of rules (Log10)",
+         x = "Score",
+         col = "Subset") + 
+    theme_bw() + 
+    theme(panel.grid = element_blank(),
+          legend.position = "top",
+          strip.background = element_blank(),
+          strip.text = element_text(size = 12)),
+  #
+  cs1_redund %>% 
+    mutate(redundancy = redundancy*100) %>% 
+    mutate(metric = str_to_title(metric)) %>% 
+    ggplot(aes(score, redundancy, col = subset)) + 
+    geom_point(alpha = 0.55) + 
+    geom_line(aes(group = subset), col = "grey20") +
+    scale_y_log10() + 
+    facet_wrap(~metric, scale = "free") +
+    labs(y = "Redundancy (Log10)",
+         x = "Score",
+         col = "Subset") + 
+    theme_bw() + 
+    theme(panel.grid = element_blank(),
+          legend.position = "top",
+          strip.background = element_blank(),
+          strip.text = element_text(size = 12)))
