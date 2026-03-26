@@ -4,7 +4,16 @@ This repository serves to share the original R code used to produce the results 
 
 This repository is actively managged and will be updated until the paper is accepted for publication.
 
-# Instructions to reproduce results
+# Source data files description (data/)
+
+- mosj_ASV_df.rds - ASV table of MOSJ dataset 
+- mosj_env_data.rds - metadata for ASV table of MOSJ dataset
+- mosj_environmental_data_category.rds - discretized metadata values for MOSJ dataset
+
+- emose_df - ASV table with metadata from EMOSE dataset
+- emose_curated_taxonomy - taxonomic data on ASVs from EMOSE dataset
+
+# Instructions to reproduce results (R/)
 
 Assuming a dedicated environment with all the files in R/ and data/ directories inside:
 
