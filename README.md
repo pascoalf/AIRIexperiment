@@ -13,6 +13,24 @@ This repository is actively managged and will be updated until the paper is acce
 - emose_df - ASV table with metadata from EMOSE dataset
 - emose_curated_taxonomy - taxonomic data on ASVs from EMOSE dataset
 
+# Rule sets obtained (rule-sets/)
+
+**Case study 1:**
+- mosj_full_rules_set_as_data_frame.rds - Association rule mining of MOSJ results as data.frame object
+- mosj_full_rules_set.rds - Association rule mining os MOSJ results as transactions object 
+- mosj_airi_by_complexity.csv - AIRI results by complexity for MOSJ data
+- mosj_airi_by_improvement.csv - AIRI results by improvement for MOSJ data
+- mosj_airi_by_mutual_information.csv - AIRI results by mutual information for MOSJ data
+
+**Case study 2:**
+- emose_rules_df.rds - Association rule mining of EMOSE results as data.frame object
+- emose_rules.rds - Association rule mining of EMOSE results as transactions object
+- emose_airi_by_complexity.csv - AIRI results by complexity for EMOSE data
+- emose_airi_by_improvement.csv - AIRI results by improvement for EMOSE data
+- emose_airi_by_mutual_information.csv - AIRI results by mutual information for EMOSE data
+
+
+
 # Instructions to reproduce results (R/)
 
 Assuming a dedicated environment with all the files in R/ and data/ directories inside:
