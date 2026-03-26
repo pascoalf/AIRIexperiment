@@ -2,7 +2,7 @@
 # association rule mining 
 set.seed(123)
 # load env and ASVs data
-ASVs_df <- readRDS("data/ASV_clean_full_df.rds")
+ASVs_df <- readRDS("data/mosj_ASV_df.rds")
 # merge relevant data
 ASVs_cat_df <- ASVs_df %>% 
   select(Sample, Classification, taxon) %>% 

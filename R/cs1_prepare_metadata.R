@@ -1,7 +1,7 @@
 # prepare metadata
 
 # load metadata from Pascoal et al., 2025
-env_data <- readRDS("./data/env_data.rds")
+env_data <- readRDS("./data/mosj_env_data.rds")
 
 env_data %>% summary()
 
@@ -52,6 +52,6 @@ env_cat <- env_data %>%
 ##
 
 # save object with discrete variables
-saveRDS(env_cat, "data/environmental_data_category.rds")
+saveRDS(env_cat, "data/mosj_environmental_data_category.rds")
 
 
