@@ -58,3 +58,6 @@ AO_ASVs_env_clean.csv
 figures/
 output/
 cs1_compare.pdf
+
+# other files
+data/backup_session
