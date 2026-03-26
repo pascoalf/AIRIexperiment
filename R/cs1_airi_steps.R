@@ -205,8 +205,8 @@ ggVennDiagram(x = list(non_redundant_by_mutualInfo$LHS,
 
 
 ## save non redundant rules for inspection
-#non_redundant_by_mutualInfo %>% write.csv("output/Rd_mutual_info_case1.csv")
-#non_redundant_by_complexity %>% write.csv("output/Rd_complex_case1.csv")
-#dependent_rules_non_redundant %>% write.csv("output/Rd_improv_case1.csv")
+#non_redundant_by_mutualInfo %>% write.csv("rule-sets/mosj_airi_by_mutual_information.csv")
+#non_redundant_by_complexity %>% write.csv("rule-sets/mosj_airi_by_complexity.csv")
+#dependent_rules_non_redundant %>% write.csv("rule-sets/mosj_airi_by_improvement.csv")
 
 

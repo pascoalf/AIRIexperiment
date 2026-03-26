@@ -208,9 +208,9 @@ ggVennDiagram(x = list(emose_non_redundant_by_mutualInfo$LHS,
 
 
 ## save non redundant rules for inspection
-emose_non_redundant_by_mutualInfo %>% write.csv("output/Rd_mutual_info_case2.csv")
-emose_non_redundant_by_complexity %>% write.csv("output/Rd_complex_case2.csv")
-emose_dependent_rules_non_redundant %>% write.csv("output/Rd_improv_case2.csv")
+emose_non_redundant_by_mutualInfo %>% write.csv("rule-sets/emose_airi_by_mutual_information.csv")
+emose_non_redundant_by_complexity %>% write.csv("rule-sets/emose_airi_by_complexity.csv")
+emose_dependent_rules_non_redundant %>% write.csv("rule-sets/emose_airi_by_improvement.csv")
 
 
 

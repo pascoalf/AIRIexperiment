@@ -1,0 +1,49 @@
+"","LHS","RHS","support","confidence","coverage","lift","count","conviction","mutualInfo","improvement","Metric"
+"1","{taxa=Bacteria NA Proteobacteria Alphaproteobacteria Pelagibacterales Pelagibacteraceae NA}","{Classification=Rare}",0.00427256841249056,1,0.00427256841249056,1.02255766233885,956,Inf,NA,1,"Mutual
+information"
+"2","{taxa=Bacteria NA Proteobacteria Alphaproteobacteria Pelagibacterales NA NA}","{Classification=Abundant}",0.00181450081116231,0.876889848812095,0.00206924599893633,180.835699853689,406,8.0834187384413,0.625239023299441,0.876889848812095,"Mutual
+information"
+"3","{taxa=Bacteria NA Proteobacteria Alphaproteobacteria Rhodobacterales Rhodobacteraceae NA,Sequencing_platform=Hiseq 2500 Rapid}","{Classification=Undetermined}",0.00121115694538174,0.865814696485623,0.0013988639258468,50.3060596683323,271,7.32411845289438,0.416792769970993,0.865814696485623,"Mutual
+information"
+"4","{taxa=Eukaryota Bacillariophyta Bacillariophyta Coscinodiscophyceae Rhizosoleniales Rhizosoleniaceae Rhizosolenia,size_fraction=>20 µm}","{Classification=Rare}",0.00133182571853785,0.94006309148265,0.00141674078112919,0.96126871727753,298,0.36805434187651,0.00301929794059908,-0.0333121676932052,"Mutual
+information"
+"5","{taxa=Bacteria NA Planctomycetes Planctomycetia Planctomycetales Planctomycetaceae NA,device=membrane,Sequencing_platform=Hiseq 2500 Rapid}","{Classification=Rare}",0.00125137986976711,0.936454849498328,0.00133629493235845,0.957579081788889,280,0.347155357164279,0.00350399981225039,-0.0430456597885036,"Mutual
+information"
+"6","{taxa=Bacteria NA Planctomycetes Planctomycetia Planctomycetales NA NA,device=membrane,Sequencing_platform=Hiseq 2500 Rapid}","{Classification=Rare}",0.00109942659986682,0.931818181818182,0.00117987244863756,0.952837821724837,246,0.323547244804167,0.00413067326420737,-0.0476823274686496,"Mutual
+information"
+"7","{taxa=Eukaryota Bacillariophyta Bacillariophyta Coscinodiscophyceae Chaetocerotales Chaetocerotaceae NA,device=membrane}","{Classification=Rare}",0.00134076414617905,0.93167701863354,0.00143908685023218,0.952693474228742,300,0.322878758761183,0.00426330390763439,-0.009656314699793,"Mutual
+information"
+"8","{taxa=Bacteria NA Proteobacteria Deltaproteobacteria NA NA NA,size_fraction=>20 µm}","{Classification=Rare}",0.00127819515269069,0.92258064516129,0.00138545628438501,0.943391907835197,286,0.284942175821851,0.00574252452168602,-0.0507946140145648,"Mutual
+information"
+"9","{taxa=Archaea NA Thaumarchaeota NA Nitrosopumilales Nitrosopumilaceae NA,device=membrane,Sequencing_platform=Hiseq 2500 Rapid}","{Classification=Rare}",0.00108601895840503,0.920454545454545,0.00117987244863756,0.941217848289168,243,0.277326209832143,0.00598710244727308,-0.059045963832286,"Mutual
+information"
+"10","{taxa=Bacteria NA Planctomycetes Phycisphaerae Phycisphaerales Phycisphaeraceae NA,device=membrane,Sequencing_platform=Hiseq 2500 Rapid}","{Classification=Rare}",0.00108601895840503,0.920454545454545,0.00117987244863756,0.941217848289168,243,0.277326209832143,0.00598710244727308,-0.059045963832286,"Mutual
+information"
+"11","{taxa=Bacteria NA Proteobacteria Gammaproteobacteria Cellvibrionales Porticoccaceae NA,device=membrane,Sequencing_platform=Hiseq 2500 Rapid}","{Classification=Rare}",0.00116199559335517,0.915492957746479,0.0012692567250495,0.936144338760918,260,0.26104379978518,0.00693785667036468,-0.0640075515403525,"Mutual
+information"
+"12","{taxa=Bacteria NA Proteobacteria Gammaproteobacteria Chromatiales Ectothiorhodospiraceae NA,Sequencing_platform=Hiseq 2500 Rapid}","{Classification=Rare}",0.00127372593887009,0.913461538461538,0.00139439471202621,0.93406709540568,285,0.254916011057828,0.0074080305513508,-0.066038970825293,"Mutual
+information"
+"13","{taxa=Eukaryota Bacillariophyta Bacillariophyta Coscinodiscophyceae NA NA NA,device=membrane}","{Classification=Rare}",0.0012647875112289,0.909967845659164,0.00138992549820561,0.930494593060754,283,0.245024009255103,0.00807848237666219,-0.0113804689475776,"Mutual
+information"
+"14","{taxa=Bacteria NA Proteobacteria Gammaproteobacteria Thiotrichales Thiotrichaceae NA,device=membrane,Sequencing_platform=Hiseq 2500 Rapid}","{Classification=Rare}",0.00107261131694324,0.909090909090909,0.00117987244863756,0.929597874853499,240,0.242660433603125,0.00807297966345893,-0.0704096001959224,"Mutual
+information"
+"15","{taxa=Bacteria NA Proteobacteria Gammaproteobacteria Oceanospirillales NA NA}","{Classification=Rare}",0.00184131609408589,0.901531728665208,0.00204243071601275,0.921868176988197,412,0.224031955871976,0.0103217946682705,0.901531728665208,"Mutual
+information"
+"16","{taxa=Eukaryota Bacillariophyta Bacillariophyta Bacillariophyceae NA NA NA,device=membrane}","{Classification=Rare}",0.0014033331396674,0.884507042253521,0.00158657090631187,0.90445945344901,314,0.1910076583794,0.0137929484489994,-0.0190223695111847,"Mutual
+information"
+"17","{taxa=Archaea NA Thaumarchaeota NA NA NA Candidatus_Nitrosopelagicus,Sequencing_platform=Hiseq 2500 Rapid}","{Classification=Rare}",0.00121115694538174,0.874193548387097,0.00138545628438501,0.893913311270413,271,0.175349031274985,0.0160051047381695,-0.105306960899735,"Mutual
+information"
+"18","{taxa=Eukaryota Bacillariophyta Bacillariophyta NA NA NA NA,device=membrane,Sequencing_platform=Hiseq 2500 Rapid}","{Classification=Rare}",0.00101898075109607,0.863636363636364,0.00117987244863756,0.883117981110824,228,0.161773622402083,0.018265312142675,-0.115864145650468,"Mutual
+information"
+"19","{taxa=Bacteria NA Proteobacteria Gammaproteobacteria Cellvibrionales NA NA,Sequencing_platform=Hiseq 2500 Rapid}","{Classification=Rare}",0.00118881087627875,0.858064516129032,0.00138545628438501,0.877420445748819,266,0.155423004993737,0.0201137188465808,-0.121435993157799,"Mutual
+information"
+"20","{taxa=Bacteria NA Actinobacteria Actinobacteria Candidatus_Actinomarinales Candidatus_Actinomarinaceae Candidatus_Actinomarina,Sequencing_platform=Hiseq 2500 Rapid}","{Classification=Rare}",0.00118434166245816,0.854838709677419,0.00138545628438501,0.8741218726445,265,0.151969160438321,0.0209704310409883,-0.124661799609412,"Mutual
+information"
+"21","{taxa=Eukaryota Bacillariophyta Bacillariophyta Coscinodiscophyceae Chaetocerotales Chaetocerotaceae Chaetoceros,size_fraction=>20 µm}","{Classification=Rare}",0.00216309948916886,0.847635726795096,0.00255192109156078,0.866756407306485,484,0.14478485641315,0.0250009060554772,-0.125739532380759,"Mutual
+information"
+"22","{taxa=Bacteria NA Bacteroidetes Flavobacteriia Flavobacteriales Cryomorphaceae NA,Sequencing_platform=Hiseq 2500 Rapid}","{Classification=Rare}",0.00119774930391995,0.842767295597484,0.00142120999494979,0.861778155681798,268,0.140301850701443,0.024357657786698,-0.136733213689347,"Mutual
+information"
+"23","{taxa=Bacteria NA Proteobacteria Alphaproteobacteria Rickettsiales NA NA,Sequencing_platform=Hiseq 2500 Rapid}","{Classification=Rare}",0.00116646480717577,0.841935483870968,0.00138545628438501,0.860927580227225,261,0.139563514688254,0.0245068402378472,-0.137565025415864,"Mutual
+information"
+"24","{taxa=Bacteria NA Bacteroidetes Flavobacteriia Flavobacteriales Crocinitomicaceae Fluviicola}","{Classification=Rare}",0.00133182571853785,0.807588075880759,0.00164913989980023,0.825805375005358,298,0.114650064019914,0.035547085533867,0.807588075880759,"Mutual
+information"

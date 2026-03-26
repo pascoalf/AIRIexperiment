@@ -1,0 +1,35 @@
+"","LHS","RHS","support","confidence","coverage","lift","count","conviction","mutualInfo","improvement","Metric"
+"1","{taxon=Bacteria_Proteobacteria_Alphaproteobacteria_SAR11 clade_Clade III_}","{Classification=Rare}",0.00675834970530452,1,0.00675834970530452,1.26077479441197,86,Inf,NA,1,"Mutual
+information"
+"2","{taxon=Bacteria_Proteobacteria_Gammaproteobacteria_Pseudomonadales_KI89A clade_}","{Classification=Rare}",0.00738703339882122,1,0.00738703339882122,1.26077479441197,94,Inf,NA,1,"Mutual
+information"
+"3","{taxon=Bacteria_Proteobacteria_Alphaproteobacteria_SAR11 clade_Clade IV_}","{Classification=Rare}",0.00762278978388998,0.989795918367347,0.00770137524557957,1.2479097454894,97,20.2700196463654,0.0323100320333551,0.989795918367347,"Mutual
+information"
+"4","{taxon=Bacteria_Proteobacteria_Alphaproteobacteria_SAR11 clade_Clade I_Clade Ia,NO2=very high,Si=very high}","{Classification=Abundant}",0.00110019646365422,0.933333333333333,0.00117878192534381,20.3367579908676,14,14.3115913555992,0.34159827298212,0.118518518518519,"Mutual
+information"
+"5","{taxon=Bacteria_Bacteroidota_Bacteroidia_Flavobacteriales_Cryomorphaceae_,PO4=very high,NO2=very high}","{Classification=Undetermined}",0.00110019646365422,0.933333333333333,0.00117878192534381,5.79915364583333,14,12.5858546168959,0.190412503406409,0.118518518518519,"Mutual
+information"
+"6","{taxon=Bacteria_Proteobacteria_Gammaproteobacteria_Pseudomonadales_Porticoccaceae_SAR92 clade,NO2=very high,NH4=Unknown}","{Classification=Undetermined}",0.00110019646365422,0.933333333333333,0.00117878192534381,5.79915364583333,14,12.5858546168959,0.190412503406409,0.118518518518519,"Mutual
+information"
+"7","{taxon=Bacteria_Planctomycetota_OM190_,PO4=very high,Si=very high,Temperature=very low}","{Classification=Undetermined}",0.00102161100196464,0.928571428571429,0.00110019646365422,5.76956612723214,13,11.7467976424361,0.186111186261745,0.0535714285714286,"Mutual
+information"
+"8","{taxon=Bacteria_Proteobacteria_Alphaproteobacteria_Rhodobacterales_Rhodobacteraceae_Planktomarina,PO4=very low}","{Classification=Undetermined}",0.0018860510805501,0.888888888888889,0.00212180746561886,5.52300347222222,24,7.55151277013752,0.181508039775693,0.888888888888889,"Mutual
+information"
+"9","{taxon=Bacteria_Bacteroidota_Bacteroidia_Flavobacteriales_Flavobacteriaceae_NS4 marine group,PelagicLayer=Epipelagic,NO2=Undetected}","{Classification=Undetermined}",0.00117878192534381,0.882352941176471,0.00133595284872299,5.48239315257353,15,7.13198428290766,0.167092057574576,0.882352941176471,"Mutual
+information"
+"10","{taxon=Bacteria_Nitrospinota_Nitrospinia_Nitrospinales_Nitrospinaceae_LS-NOB,Si=very high,Temperature=very low}","{Classification=Undetermined}",0.00110019646365422,0.875,0.0012573673870334,5.43670654296875,14,6.7124557956778,0.162268072913611,0.875,"Mutual
+information"
+"11","{taxon=Bacteria_Proteobacteria_Gammaproteobacteria_Burkholderiales_Nitrosomonadaceae_Nitrosomonas,PelagicLayer=Mesopelagic,Si=very high}","{Classification=Undetermined}",0.00102161100196464,0.866666666666667,0.00117878192534381,5.38492838541667,13,6.29292730844794,0.15705742123819,0.866666666666667,"Mutual
+information"
+"12","{taxon=Bacteria_Verrucomicrobiota_Verrucomicrobiae_Verrucomicrobiales_Rubritaleaceae_Roseibacillus,PO4=very high,NO2=very high}","{Classification=Undetermined}",0.00102161100196464,0.866666666666667,0.00117878192534381,5.38492838541667,13,6.29292730844794,0.15705742123819,0.866666666666667,"Mutual
+information"
+"13","{taxon=Bacteria_Bacteroidota_Bacteroidia_Flavobacteriales_NS9 marine group_,PelagicLayer=Epipelagic,Salinity=low}","{Classification=Undetermined}",0.00149312377210216,0.863636363636364,0.00172888015717092,5.36609996448864,19,6.15308447937132,0.16392645564949,0.863636363636364,"Mutual
+information"
+"14","{taxon=Bacteria_Bacteroidota_Bacteroidia_Flavobacteriales_Flavobacteriaceae_,PelagicLayer=Epipelagic,NH4=Unknown,Si=low}","{Classification=Abundant}",0.00117878192534381,0.833333333333333,0.00141453831041257,18.1578196347032,15,5.72463654223969,0.28242857940464,0.833333333333333,"Mutual
+information"
+"15","{taxon=Bacteria_Bacteroidota_Bacteroidia_Flavobacteriales_Flavobacteriaceae_NS5 marine group,Si=very high,Temperature=very low}","{Classification=Undetermined}",0.00117878192534381,0.833333333333333,0.00141453831041257,5.17781575520833,15,5.03434184675835,0.145936285677719,0.833333333333333,"Mutual
+information"
+"16","{taxon=Bacteria_Bacteroidota_Bacteroidia_Flavobacteriales_Flavobacteriaceae_Ulvibacter,NH4=Unknown,Temperature=very high}","{Classification=Undetermined}",0.00110019646365422,0.823529411764706,0.00133595284872299,5.11690027573529,14,4.75465618860511,0.140662720027515,0.823529411764706,"Mutual
+information"
+"17","{taxon=Bacteria_Proteobacteria_Alphaproteobacteria_Rhodobacterales_Rhodobacteraceae_Ascidiaceihabitans,PelagicLayer=Epipelagic,NH4=Unknown,Si=high}","{Classification=Undetermined}",0.00102161100196464,0.8125,0.0012573673870334,5.04837036132812,13,4.47497053045187,0.134994696277812,0.8125,"Mutual
+information"
