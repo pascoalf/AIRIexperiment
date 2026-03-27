@@ -62,3 +62,7 @@ cs1_compare.pdf
 # other files
 data/backup_session
 
+repo/
+
+rule-sets/emose_rules_df.csv
+rule-sets/mosj_full_rules_set_as_data_frame.csv
