@@ -1,6 +1,6 @@
 # Source code and data to reproduce paper: "AIRI: automatic interesting rules identification"
 
-This repository serves to share the original R code used to produce the results presented in the paper "AIRI: automatic interesting rules identification", which is currently undergoing peer-review.
+This repository serves to share the original R code used to produce the results presented in the paper "AIRI: automatic interesting rules identification", which is currently undergoing double blind peer-review.
 
 This repository is actively managged and will be updated until the paper is accepted for publication.
 
@@ -67,11 +67,10 @@ Assuming a dedicated environment with all the files in R/ and data/ directories 
 
 # Citation
 ## Source code citation
-If you use this code for your own research, please cite our paper:
-1. Pascoal F., Costa R., Magalhães C., Baptista S.M., Branco P., AIRI: automatic interesting rules identification. Under peer-review.
+Unavailable - paper undergoing double-blind peer review.
 
 ## Additional citation for source data
 If you use the source data available at this repository, please cite the original papers describing and presenting the datasets:
 
 - **MOSJ**: Pascoal, F., Branco, P., Torgo, L. et al. Definition of the microbial rare biosphere through unsupervised machine learning. Commun Biol 8, 544 (2025). https://doi.org/10.1038/s42003-025-07912-4
-- **EMOSE**: Francisco Pascoal, Maria Paola Tomasino, Roberta Piredda, Grazia Marina Quero, Luís Torgo, Julie Poulain, Pierre E Galand, Jed A Fuhrman, Alex Mitchell, Tinkara Tinta, Timotej Turk Dermastia, Antonio Fernandez-Guerra, Alessandro Vezzi, Ramiro Logares, Francesca Malfatti, Hisashi Endo, Anna Maria Dąbrowska, Fabio De Pascale, Pablo Sánchez, Nicolas Henry, Bruno Fosso, Bryan Wilson, Stephan Toshchakov, Gregory Kevin Ferrant, Ivo Grigorov, Fabio Rocha Jimenez Vieira, Rodrigo Costa, Stéphane Pesant, Catarina Magalhães, Inter-comparison of marine microbiome sampling protocols, ISME Communications, Volume 3, Issue 1, December 2023, 84, https://doi.org/10.1038/s43705-023-00278-w
+- **EMOSE**: Pascoal, F., Tomasino, M. P., Piredda, R., Quero, G. M., Torgo, L., Poulain, J., Galand, P. E., Fuhrman, J. A., Mitchell, A., Tinta, T., Turk Dermastia, T., Fernandez-Guerra, A., Vezzi, A., Logares, R., Malfatti, F., Endo, H., Dąbrowska, A. M., De Pascale, F., Sánchez, P., Henry, N., Fosso, B., Wilson, B., Toshchakov, S., Ferrant, G. K., Grigorov, I., Vieira, F. R. J., Costa, R., Pesant, S., Magalhães, C. (2023). Inter-comparison of marine microbiome sampling protocols. ISME Communications, 3(1), 84. https://doi.org/10.1038/s43705-023-00278-w
