@@ -187,11 +187,23 @@ count_items <- function(LHS, x){
 }
 
 diagnosis_rules_dependent_df$LHS %>% count_items(x = "area_mean")
+# feature names
+featues_bc <- names(breast_cancer_df)[3:32]
+
+#
+all_sums_test <- map(featues_bc, 
+       .f = ~count_items(diagnosis_rules_dependent_df$LHS, x = .x)) 
+#
+data.frame(total = unlist(all_sums_test)) %>% 
+  cbind(featues_bc) %>% 
+  arrange(desc(total)) ## here
+
+##>> multiple possible keys --> ulrb??
 
 # nest
 diagnosis_rules_dependent_df %>% 
   group_by(RHS) %>% 
   nest() %>% 
-  summarise() 
+  mutate(key = map(.x = data, .y = ))  
   
 
