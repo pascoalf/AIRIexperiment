@@ -194,9 +194,16 @@ featues_bc <- names(breast_cancer_df)[3:32]
 all_sums_test <- map(featues_bc, 
        .f = ~count_items(diagnosis_rules_dependent_df$LHS, x = .x)) 
 #
+
 data.frame(total = unlist(all_sums_test)) %>% 
   cbind(featues_bc) %>% 
-  arrange(desc(total)) ## here
+  arrange(desc(total)) %>% 
+  mutate(Sample = "single") %>% 
+  define_rb(abundance_col = "total") %>% 
+  filter(Classification == "Abundant") %>% 
+  pull(featues_bc)
+#
+
 
 ##>> multiple possible keys --> ulrb??
 
