@@ -6,10 +6,32 @@ breast_cancer_df <- read.csv("data/breast_cancer.csv")
 
 # discretize based on quartiles
 # use mean values
-
+test <- breast_cancer_df
 quantile(breast_cancer_df$radius_sd)
 
-breast_cancer_transactions <- breast_cancer_df %>% select(-ID) %>% transactions()
+test$radius_sd
+
+into_quartile <- function(x){
+  case_when(is.na(x) ~ "Unknown",
+            x == 0 ~ "Undetected",
+            x <= quantile(x, na.rm = TRUE)[2] ~ "very low",
+            x <= median(x, na.rm = TRUE) ~ "low",
+            x <= quantile(x, na.rm = TRUE)[4] ~ "high",
+            x > quantile(x, na.rm = TRUE)[4] ~ "very high")  
+}
+
+# all numerical to categorical
+breast_cancer_cat <- sapply(breast_cancer_df[,3:32], into_quartile)
+breast_cancer_cat <- breast_cancer_cat %>% 
+  cbind(Diagnosis = breast_cancer_df$Diagnosis) %>% 
+  as.data.frame() %>% 
+  mutate(Diagnosis = ifelse(Diagnosis == "M", "Malginant", "Benign")) %>% 
+  mutate_all(as.factor)
+
+
+# view distribution of vars -- sup material
+breast_cancer_transactions <- breast_cancer_cat %>% transactions()
+
 #
 View(DATAFRAME(breast_cancer_transactions))
 #
@@ -22,43 +44,11 @@ diagnosis_rhs <- grep("Diagnosis=",
 
 #
 diagnosis_rules <- apriori(breast_cancer_transactions,
-                      parameter = list(support = 0.1,minlen = 2, maxlen = 30),
+                      parameter = list(support = 0.05,minlen = 2, maxlen = 30),
                       appearance = list(rhs = diagnosis_rhs))
-
+#
 diagnosis_rules %>% DATAFRAME() %>% View()
 diagnosis_rules_df <- diagnosis_rules %>% DATAFRAME()
-
-#
-diagnosis_rules_df %>% 
-  ggplot(aes(support, confidence, fill = lift)) + 
-  geom_jitter(shape = 21, col = "grey", size = 2) + 
-  scale_fill_gradient(low = reds[1], high = reds[9]) + 
-  theme_classic() + 
-  theme(legend.position = "top",
-        axis.title = element_text(size = 16),
-        axis.text = element_text(size = 14),
-        legend.text = element_text(size = 12),
-        legend.title = element_text(size = 14)) + 
-  labs(x = "Conviction",
-       y = "Confidence",
-       fill = "Lift: ")
-
-# alternative
-diagnosis_rules_df %>% 
-  ggplot(aes(support, confidence, col = RHS)) + 
-  geom_jitter(size = 2) + 
-  #scale_color_gradient(low = reds[1], high = reds[9]) + 
-  # labs(title = paste(length(full_rules_df[,1]), "rules")) + 
-  theme_classic() + 
-  theme(legend.position = "top",
-        axis.title = element_text(size = 16),
-        axis.text = element_text(size = 14),
-        legend.text = element_text(size = 12),
-        legend.title = element_text(size = 14),
-        panel.background = element_rect(fill = "grey80")) + 
-  labs(x = "Conviction",
-       y = "Confidence",
-       col = "Diagnosis: ")
 
 # AIRI steps
 
@@ -100,6 +90,8 @@ quality(diagnosis_rules_dependent)$mutualInfo <- interestMeasure(diagnosis_rules
 quality(diagnosis_rules_dependent)$improvement <- interestMeasure(diagnosis_rules_dependent,
                                                              measure = "improvement")
 #
+diagnosis_rules_dependent %>% DATAFRAME() %>% View()
+
 ## dependent rules - nonredundant
 # key item is worst measurement of any var
 # Remove redundancy by Improvement
@@ -117,7 +109,7 @@ diagnosis_rules_dependent %>%
                          str_detect(LHS, "perimeter_worst") ~ "perimeter_worst",
                          str_detect(LHS, "radius_worst") ~ "radius_worst")) %>% 
   filter(!is.na(Key)) %>% 
-  group_by(LHS) %>% 
+  group_by(Key) %>% 
   arrange(desc(improvement)) %>% 
   slice_head(n = 1) %>% 
   ungroup() %>% 
@@ -181,8 +173,25 @@ diagnosis_rules_non_redundant_complex <- diagnosis_rules_dependent %>%
 diagnosis_rules_non_redundant_complex %>% View()
 
 ##==> not working as expected, because the key is just equal to each feature, not each feature value
+## test dynamic key
+diagnosis_rules_dependent_df <- diagnosis_rules_dependent %>% DATAFRAME()
+#
+names(breast_cancer_cat)
+#
+diagnosis_rules_dependent_df %>% 
+  filter(str_detect(RHS, "Benign")) %>% 
+  summarise(area = sum(str_count(LHS, "area")))
 
+count_items <- function(LHS, x){
+  sum(str_count(LHS, x))
+}
 
+diagnosis_rules_dependent_df$LHS %>% count_items(x = "area_mean")
 
-
+# nest
+diagnosis_rules_dependent_df %>% 
+  group_by(RHS) %>% 
+  nest() %>% 
+  summarise() 
+  
 
