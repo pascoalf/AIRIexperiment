@@ -1,6 +1,41 @@
+---
+title: "reporting_BM"
+output: html_document
+date: "2026-04-15"
+---
+
+```{r}
+# for markdown
+library(kableExtra)
+```
+
+```{r}
+# Prepare session
+# Packages
+library(dplyr)
+library(arules)
+library(arulesViz)
+library(ggplot2)
+library(ulrb)
+library(stringr)
+library(tidyr)
+library(ggpubr)
+library(tidyr)
+library(ggVennDiagram)
+library(purrr)
+library(gridExtra)
+# vector colors
+qualitative_colors <- 
+  c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+reds <- RColorBrewer::brewer.pal(9, "Reds")
+
+```
+
+
+```{r}
 # Bank marketing dataset
 ## Breast cancer - new case study
-bank_marketing_df <- read.csv("data/bank-full.csv", sep = ";")
+bank_marketing_df <- read.csv("../data/bank-full.csv", sep = ";")
 
 ## numeric vars to categoric -- case by case
 bank_marketing_cat <- bank_marketing_df %>% 
@@ -32,7 +67,7 @@ bank_marketing_cat <- bank_marketing_df %>%
 bank_marketing_transactions <- bank_marketing_cat %>% transactions()
 
 #
-View(DATAFRAME(bank_marketing_transactions))
+#View(DATAFRAME(bank_marketing_transactions))
 #
 
 # get rhs items (set the consequent)
@@ -46,7 +81,7 @@ subscription_rules <- apriori(bank_marketing_transactions,
                                             minlen = 2, maxlen = 18),
                            appearance = list(rhs = subscription_rhs))
 #
-subscription_rules %>% DATAFRAME() %>% View()
+#subscription_rules %>% DATAFRAME() %>% View()
 subscription_rules_df <- subscription_rules %>% DATAFRAME()
 
 # AIRI steps
@@ -90,11 +125,10 @@ quality(subscription_rules_dependent)$improvement <- interestMeasure(subscriptio
                                                                   measure = "improvement")
 #
 subscription_rules_dependent_df <- subscription_rules_dependent %>% DATAFRAME()
-subscription_rules_dependent %>% DATAFRAME() %>% View()
+#subscription_rules_dependent %>% DATAFRAME() %>% View()
 
 ## dependent rules - nonredundant
 # key item is worst measurement of any var
-bank_marketing_cat$education
 bal_key <- grep("balance=", 
      itemLabels(bank_marketing_transactions), 
      value = TRUE)
@@ -124,7 +158,7 @@ subscription_rules_non_redundant_improv <- subscription_rules_dependent %>%
          lift,	count,	conviction,	
          mutualInfo,	improvement)
 
-subscription_rules_non_redundant_improv %>% View()
+subscription_rules_non_redundant_improv %>% kable()
 
 ##
 subscription_rules_non_redundant_mutualInfo <- subscription_rules_dependent %>% 
@@ -143,7 +177,7 @@ subscription_rules_non_redundant_mutualInfo <- subscription_rules_dependent %>%
          lift,	count,	conviction,	
          mutualInfo,	improvement) 
 
-subscription_rules_non_redundant_mutualInfo %>% View()
+subscription_rules_non_redundant_mutualInfo %>% kable()
 
 
 #
@@ -164,7 +198,7 @@ subscription_rules_non_redundant_complex <- subscription_rules_dependent %>%
          lift,	count,	conviction,	
          mutualInfo,	improvement) 
 
-subscription_rules_non_redundant_complex %>% View()
+subscription_rules_non_redundant_complex %>% kable()
 
 ## plots
 ggVennDiagram(x = list(subscription_rules_non_redundant_mutualInfo$LHS,
@@ -257,7 +291,7 @@ jaccard_all <- function(ruleset){
     intersection = length(intersect(a, b))
     union = length(a) + length(b) - intersection
     return(intersection/union)
-  }
+    }
   # to get possible comparisons between rules
   set_comparisons <- function(ruleset = ruleset){
     #  
@@ -348,4 +382,5 @@ subscription_all_non_redundant %>%
          sd_jaccard = map(.x = jaccard, ~sd(.x))) %>% 
   unnest(c(mean_jaccard, sd_jaccard))
 
+```
 
