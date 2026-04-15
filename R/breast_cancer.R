@@ -332,13 +332,16 @@ jaccard_all <- function(ruleset){
   return(jaccard_for_all)
 }
 
-# apply to all
-jaccard_scores_df <- diagnosis_all_non_redundant %>% 
+# apply to all (takes very long time)
+jaccard_scores_df_BCD <- diagnosis_all_non_redundant %>% 
   group_by(RHS, Metric) %>% 
   nest() %>% 
   mutate(jaccard = map(.x = data, .f = ~jaccard_all(.x)))
 #
-jaccard_scores_df %>%
+save(jaccard_scores_df_BCD, file = "jaccard_scores_df_BCD")
+
+#
+jaccard_scores_df_BCD %>%
   unnest(jaccard) %>% 
   ggplot(aes(Metric, jaccard, col = RHS)) + 
   geom_jitter(height = 0, width = 0.1, alpha = 0.5) + 
@@ -347,8 +350,18 @@ jaccard_scores_df %>%
        subtitle = "Breast Cancer Diagnostic dataset") + 
   theme_classic()
 
+# violin
+jaccard_scores_df_BCD %>%
+  unnest(jaccard) %>% 
+  ggplot(aes(Metric, jaccard)) + 
+  geom_violin(aes(fill = RHS)) + 
+  stat_summary(aes(col = RHS)) + 
+  labs(title = "Jaccard score for pairwise rules",
+       subtitle = "Breast Cancer Diagnostic dataset \ntotal pairwise comparisons: 833,009") + 
+  theme_classic()
+
 # summary
-jaccard_scores_df %>%
+jaccard_scores_df_BCD %>%
   mutate(mean_jaccard = map(.x = jaccard, ~mean(.x)),
          sd_jaccard = map(.x = jaccard, ~sd(.x)),
          min_jaccard = map(.x = jaccard, ~min(.x)),
@@ -357,14 +370,13 @@ jaccard_scores_df %>%
 
 
 ## overall (for general compar)
-diagnosis_all_non_redundant %>% 
+bcd_jaccard_overall <- diagnosis_all_non_redundant %>% 
   group_by(Metric) %>% 
   nest() %>% 
   mutate(jaccard = map(.x = data, .f = ~jaccard_all(.x))) %>% 
   mutate(mean_jaccard = map(.x = jaccard, ~mean(.x)),
          sd_jaccard = map(.x = jaccard, ~sd(.x))) %>% 
   unnest(c(mean_jaccard, sd_jaccard))
-
-
-
+#
+save(bcd_jaccard_overall, file = "bcd_jaccard_overall")
 

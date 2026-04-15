@@ -304,13 +304,13 @@ jaccard_all <- function(ruleset){
 }
 
 # apply to all
-jaccard_scores_df <- subscription_all_non_redundant %>% 
+jaccard_scores_df_BM <- subscription_all_non_redundant %>% 
   group_by(RHS, Metric) %>% 
   nest() %>% 
   mutate(jaccard = map(.x = data, .f = ~jaccard_all(.x)))
 
 # points
-jaccard_scores_df %>%
+jaccard_scores_df_BM %>%
   unnest(jaccard) %>% 
   ggplot(aes(Metric, jaccard, col = RHS)) + 
   geom_jitter(height = 0, width = 0.1, alpha = 0.25) +
@@ -320,7 +320,7 @@ jaccard_scores_df %>%
   theme_classic()
 
 # violin
-jaccard_scores_df %>%
+jaccard_scores_df_BM %>%
   unnest(jaccard) %>% 
   ggplot(aes(Metric, jaccard, col = RHS)) + 
   #geom_jitter(height = 0, width = 0.1, alpha = 0.5) + 
