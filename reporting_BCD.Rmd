@@ -65,7 +65,10 @@ breast_cancer_transactions <- breast_cancer_cat %>% transactions()
 #View(DATAFRAME(breast_cancer_transactions))
 #
 summary(breast_cancer_transactions)
+```
 
+
+```{r}
 # get rhs items (set the consequent)
 diagnosis_rhs <- grep("Diagnosis=", 
                             itemLabels(breast_cancer_transactions), 
@@ -78,7 +81,11 @@ diagnosis_rules <- apriori(breast_cancer_transactions,
 #
 #diagnosis_rules %>% DATAFRAME() %>% View()
 diagnosis_rules_df <- diagnosis_rules %>% DATAFRAME()
+```
 
+
+
+```{r}
 # AIRI steps
 
 ## Step 1 - identify dependent rules
@@ -119,24 +126,54 @@ quality(diagnosis_rules_dependent)$mutualInfo <- interestMeasure(diagnosis_rules
 quality(diagnosis_rules_dependent)$improvement <- interestMeasure(diagnosis_rules_dependent,
                                                              measure = "improvement")
 #
-#diagnosis_rules_dependent %>% DATAFRAME() %>% View()
+#diagnosis_rules_dependent %>% DATAFRAME() %>% kable()
+```
 
+
+```{r}
+## Prepare key -- get items
+worst_val_items <- grep("worst", 
+                        itemLabels(breast_cancer_transactions), 
+                        value = TRUE)
+# must dividde by each feature because of multiple keys in same antecedent
+worst_val_names <- grep("worst",names(breast_cancer_cat), value = TRUE)
+
+# this could probably be more efficient...
+worst_radius_items <- grep(worst_val_names[1], itemLabels(breast_cancer_transactions), value = TRUE)
+worst_texture_items <- grep(worst_val_names[2], itemLabels(breast_cancer_transactions), value = TRUE)
+worst_perimeter_items <- grep(worst_val_names[3], itemLabels(breast_cancer_transactions), value = TRUE)
+worst_area_items <- grep(worst_val_names[4], itemLabels(breast_cancer_transactions), value = TRUE)
+worst_smooth_items <- grep(worst_val_names[5], itemLabels(breast_cancer_transactions), value = TRUE)
+worst_compact_items <- grep(worst_val_names[6], itemLabels(breast_cancer_transactions), value = TRUE)
+worst_concavity_items <- grep(worst_val_names[7], itemLabels(breast_cancer_transactions), value = TRUE)
+worst_concavep_items <- grep(worst_val_names[8], itemLabels(breast_cancer_transactions), value = TRUE)
+worst_symm_items <- grep(worst_val_names[9], itemLabels(breast_cancer_transactions), value = TRUE)
+worst_fractal_items <- grep(worst_val_names[10], itemLabels(breast_cancer_transactions), value = TRUE)
+```
+
+
+```{r}
 ## dependent rules - nonredundant
 # key item is worst measurement of any var
 # Remove redundancy by Improvement
-#
 diagnosis_rules_non_redundant_improv <- diagnosis_rules_dependent %>% 
   DATAFRAME() %>%
-  mutate(Key = case_when(str_detect(LHS, "fractal_dimension_worst") ~ "fractal_dimension_worst",
-                         str_detect(LHS, "area_worst") ~ "area_worst",
-                         str_detect(LHS, "smoothness_worst") ~ "smoothness_worst",
-                         str_detect(LHS, "compactness_worst") ~ "compactness_worst",
-                         str_detect(LHS, "concavity_worst") ~ "concavity_worst",
-                         str_detect(LHS, "concave_points_worst") ~ "concave_points_worst",
-                         str_detect(LHS, "symmetry_worst") ~ "symmetry_worst",
-                         str_detect(LHS, "perimeter_worst") ~ "perimeter_worst",
-                         str_detect(LHS, "radius_worst") ~ "radius_worst")) %>% 
-  filter(!is.na(Key)) %>% 
+  mutate(worst_radius_key = str_extract(LHS, paste(c(worst_radius_items), collapse = "|")),
+         worst_texture_key = str_extract(LHS, paste(c(worst_texture_items), collapse = "|")),
+         worst_perimeter_key = str_extract(LHS, paste(c(worst_perimeter_items), collapse = "|")),
+         worst_area_key = str_extract(LHS, paste(c(worst_area_items), collapse = "|")),
+         worst_smooth_key = str_extract(LHS, paste(c(worst_smooth_items), collapse = "|")),
+         worst_compact_key = str_extract(LHS, paste(c(worst_compact_items), collapse = "|")),
+         worst_concavity_key = str_extract(LHS, paste(c(worst_concavity_items), collapse = "|")),
+         worst_concavep_key = str_extract(LHS, paste(c(worst_concavep_items), collapse = "|")),
+         worst_symm_key = str_extract(LHS, paste(c(worst_symm_items), collapse = "|")),
+         worst_fractal_key = str_extract(LHS, paste(c(worst_fractal_items), collapse = "|"))) %>% 
+  mutate(Key = paste(worst_radius_key, worst_texture_key, worst_perimeter_key,
+                     worst_area_key, worst_smooth_key, worst_compact_key,
+                     worst_concavity_key, worst_concavep_key, worst_symm_key, worst_fractal_key)) %>% 
+  mutate(Key = str_remove_all(Key, "NA"),
+         Key = str_remove_all(Key, " ")) %>%
+  filter(Key != "") %>% # remove items outside of key
   group_by(Key) %>% 
   arrange(desc(improvement)) %>% 
   slice_head(n = 1) %>% 
@@ -146,24 +183,28 @@ diagnosis_rules_non_redundant_improv <- diagnosis_rules_dependent %>%
          lift,	count,	conviction,	
          mutualInfo,	improvement)
 
-#diagnosis_rules_non_redundant_improv %>% View()
-diagnosis_rules_non_redundant_improv %>% kable()
+#diagnosis_rules_non_redundant_improv %>% kable()
 
 ##
 diagnosis_rules_non_redundant_mutualInfo <- diagnosis_rules_dependent %>% 
   DATAFRAME() %>%
-  mutate(Key = case_when(str_detect(LHS, "fractal_dimension_worst") ~ "fractal_dimension_worst",
-                         str_detect(LHS, "area_worst") ~ "area_worst",
-                         str_detect(LHS, "smoothness_worst") ~ "smoothness_worst",
-                         str_detect(LHS, "compactness_worst") ~ "compactness_worst",
-                         str_detect(LHS, "concavity_worst") ~ "concavity_worst",
-                         str_detect(LHS, "concave_points_worst") ~ "concave_points_worst",
-                         str_detect(LHS, "symmetry_worst") ~ "symmetry_worst",
-                         str_detect(LHS, "perimeter_worst") ~ "perimeter_worst",
-                         str_detect(LHS, "radius_worst") ~ "radius_worst")) %>% 
-  distinct() %>% 
-  #filter(!is.na(Key)) %>% 
-  group_by(Key) %>% 
+  mutate(worst_radius_key = str_extract(LHS, paste(c(worst_radius_items), collapse = "|")),
+         worst_texture_key = str_extract(LHS, paste(c(worst_texture_items), collapse = "|")),
+         worst_perimeter_key = str_extract(LHS, paste(c(worst_perimeter_items), collapse = "|")),
+         worst_area_key = str_extract(LHS, paste(c(worst_area_items), collapse = "|")),
+         worst_smooth_key = str_extract(LHS, paste(c(worst_smooth_items), collapse = "|")),
+         worst_compact_key = str_extract(LHS, paste(c(worst_compact_items), collapse = "|")),
+         worst_concavity_key = str_extract(LHS, paste(c(worst_concavity_items), collapse = "|")),
+         worst_concavep_key = str_extract(LHS, paste(c(worst_concavep_items), collapse = "|")),
+         worst_symm_key = str_extract(LHS, paste(c(worst_symm_items), collapse = "|")),
+         worst_fractal_key = str_extract(LHS, paste(c(worst_fractal_items), collapse = "|"))) %>% 
+  mutate(Key = paste(worst_radius_key, worst_texture_key, worst_perimeter_key,
+                     worst_area_key, worst_smooth_key, worst_compact_key,
+                     worst_concavity_key, worst_concavep_key, worst_symm_key, worst_fractal_key)) %>% 
+  mutate(Key = str_remove_all(Key, "NA"),
+         Key = str_remove_all(Key, " ")) %>%
+  filter(Key != "") %>% # remove items outside of key
+    group_by(Key) %>% 
   arrange(desc(mutualInfo)) %>% 
   slice_head(n = 1) %>% 
   ungroup() %>% 
@@ -172,25 +213,29 @@ diagnosis_rules_non_redundant_mutualInfo <- diagnosis_rules_dependent %>%
          lift,	count,	conviction,	
          mutualInfo,	improvement) 
 
-#diagnosis_rules_non_redundant_mutualInfo %>% View()
-diagnosis_rules_non_redundant_mutualInfo %>% kable()
+#diagnosis_rules_non_redundant_mutualInfo %>% kable()
 
 #
 diagnosis_rules_non_redundant_complex <- diagnosis_rules_dependent %>% 
   DATAFRAME() %>%
   mutate(LHSsize = str_count(LHS, ",")) %>% 
-  mutate(Key = case_when(str_detect(LHS, "fractal_dimension_worst") ~ "fractal_dimension_worst",
-                         str_detect(LHS, "area_worst") ~ "area_worst",
-                         str_detect(LHS, "smoothness_worst") ~ "smoothness_worst",
-                         str_detect(LHS, "compactness_worst") ~ "compactness_worst",
-                         str_detect(LHS, "concavity_worst") ~ "concavity_worst",
-                         str_detect(LHS, "concave_points_worst") ~ "concave_points_worst",
-                         str_detect(LHS, "symmetry_worst") ~ "symmetry_worst",
-                         str_detect(LHS, "perimeter_worst") ~ "perimeter_worst",
-                         str_detect(LHS, "radius_worst") ~ "radius_worst")) %>% 
-  distinct() %>% 
-  #filter(!is.na(Key)) %>% 
-  group_by(Key) %>% 
+  mutate(worst_radius_key = str_extract(LHS, paste(c(worst_radius_items), collapse = "|")),
+         worst_texture_key = str_extract(LHS, paste(c(worst_texture_items), collapse = "|")),
+         worst_perimeter_key = str_extract(LHS, paste(c(worst_perimeter_items), collapse = "|")),
+         worst_area_key = str_extract(LHS, paste(c(worst_area_items), collapse = "|")),
+         worst_smooth_key = str_extract(LHS, paste(c(worst_smooth_items), collapse = "|")),
+         worst_compact_key = str_extract(LHS, paste(c(worst_compact_items), collapse = "|")),
+         worst_concavity_key = str_extract(LHS, paste(c(worst_concavity_items), collapse = "|")),
+         worst_concavep_key = str_extract(LHS, paste(c(worst_concavep_items), collapse = "|")),
+         worst_symm_key = str_extract(LHS, paste(c(worst_symm_items), collapse = "|")),
+         worst_fractal_key = str_extract(LHS, paste(c(worst_fractal_items), collapse = "|"))) %>% 
+  mutate(Key = paste(worst_radius_key, worst_texture_key, worst_perimeter_key,
+                     worst_area_key, worst_smooth_key, worst_compact_key,
+                     worst_concavity_key, worst_concavep_key, worst_symm_key, worst_fractal_key)) %>% 
+  mutate(Key = str_remove_all(Key, "NA"),
+         Key = str_remove_all(Key, " ")) %>%
+  filter(Key != "") %>% # remove items outside of key
+    group_by(Key) %>% 
   arrange(desc(LHSsize)) %>% 
   slice_head(n = 1) %>% 
   ungroup() %>% 
@@ -199,10 +244,11 @@ diagnosis_rules_non_redundant_complex <- diagnosis_rules_dependent %>%
          lift,	count,	conviction,	
          mutualInfo,	improvement) 
 
-#diagnosis_rules_non_redundant_complex %>% View()
-# for knitr
-diagnosis_rules_non_redundant_complex %>% kable()
+#diagnosis_rules_non_redundant_complex %>% kable()
+```
 
+
+```{r}
 ## plots
 ggVennDiagram(x = list(diagnosis_rules_non_redundant_mutualInfo$LHS,
                        diagnosis_rules_non_redundant_complex$LHS,
@@ -217,7 +263,10 @@ ggVennDiagram(x = list(diagnosis_rules_non_redundant_mutualInfo$LHS,
        subtitle = "Key: worst values") + 
   xlim(-6,9)+
   ylim(-9,6)
+```
 
+
+```{r}
 # summary
 diagnosis_rules_non_redundant_mutualInfo$Metric <- "Mutual\ninformation"
 diagnosis_rules_non_redundant_complex$Metric <- "Complexity"
@@ -226,7 +275,7 @@ diagnosis_rules_non_redundant_improv$Metric <-"Improvement"
 diagnosis_all_non_redundant <- 
   rbind(diagnosis_rules_non_redundant_mutualInfo,
         diagnosis_rules_non_redundant_complex,
-        diagnosis_rules_non_redundant_improv)
+        diagnosis_rules_non_redundant_improv) 
 ```
 
 
@@ -342,7 +391,10 @@ jaccard_all <- function(ruleset){
   #
   return(jaccard_for_all)
 }
+```
 
+
+```{r, eval = FALSE}
 # apply to all
 jaccard_scores_df <- diagnosis_all_non_redundant %>% 
   group_by(RHS, Metric) %>% 
@@ -351,9 +403,17 @@ jaccard_scores_df <- diagnosis_all_non_redundant %>%
 ```
 
 
-```{r}
+```{r, eval=FALSE}
+# apply to all (takes very long time)
+jaccard_scores_df_BCD <- diagnosis_all_non_redundant %>% 
+  group_by(RHS, Metric) %>% 
+  nest() %>% 
+  mutate(jaccard = map(.x = data, .f = ~jaccard_all(.x)))
 #
-jaccard_scores_df %>%
+save(jaccard_scores_df_BCD, file = "jaccard_scores_df_BCD")
+
+#
+jaccard_scores_df_BCD %>%
   unnest(jaccard) %>% 
   ggplot(aes(Metric, jaccard, col = RHS)) + 
   geom_jitter(height = 0, width = 0.1, alpha = 0.5) + 
@@ -362,13 +422,36 @@ jaccard_scores_df %>%
        subtitle = "Breast Cancer Diagnostic dataset") + 
   theme_classic()
 
+# violin
+jaccard_scores_df_BCD %>%
+  unnest(jaccard) %>% 
+  ggplot(aes(Metric, jaccard)) + 
+  geom_violin(aes(fill = RHS)) + 
+  stat_summary(aes(col = RHS)) + 
+  labs(title = "Jaccard score for pairwise rules",
+       subtitle = "Breast Cancer Diagnostic dataset \ntotal pairwise comparisons: 833,009") + 
+  theme_classic()
+
 # summary
-jaccard_scores_df %>%
+jaccard_scores_df_BCD %>%
   mutate(mean_jaccard = map(.x = jaccard, ~mean(.x)),
          sd_jaccard = map(.x = jaccard, ~sd(.x)),
          min_jaccard = map(.x = jaccard, ~min(.x)),
          max_jaccard = map(.x = jaccard, ~max(.x))) %>% 
-  unnest(mean_jaccard, sd_jaccard, min_jaccard, max_jaccard) 
+  unnest(c(mean_jaccard, sd_jaccard, min_jaccard, max_jaccard)) 
+
+
+## overall (for general compar)
+bcd_jaccard_overall <- diagnosis_all_non_redundant %>% 
+  group_by(Metric) %>% 
+  nest() %>% 
+  mutate(jaccard = map(.x = data, .f = ~jaccard_all(.x))) %>% 
+  mutate(mean_jaccard = map(.x = jaccard, ~mean(.x)),
+         sd_jaccard = map(.x = jaccard, ~sd(.x))) %>% 
+  unnest(c(mean_jaccard, sd_jaccard))
+#
+kable(bcd_jaccard_overall)
+#save(bcd_jaccard_overall, file = "bcd_jaccard_overall")
 ```
 
 
