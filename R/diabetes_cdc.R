@@ -99,10 +99,10 @@ diabetes_rhs <- grep("Diabetes_012=",
 ## make rule set
 diabetes_rules <- apriori(diabetes_transactions,
                            parameter = list(support = 0.01,minlen = 3, maxlen = 20),
-                           appearance = list(rhs = diabetes_rhs),maxtime = 30)
+                           appearance = list(rhs = diabetes_rhs),maxtime = 200)
 #
 diabetes_rules %>% DATAFRAME() %>% View()
 
-diabetes_rules %>% DATAFRAME() %>% filter(!str_detect(RHS, "No diabetes"))
+diabetes_rules %>% DATAFRAME() %>% filter(str_detect(RHS, "Diabetes_012=Diabetes"))
 
 
