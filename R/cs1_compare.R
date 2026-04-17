@@ -165,7 +165,18 @@ count_mosj_rules %>%
 
 ## Estimate redundancy based on jaccard coefficient
 
+source("R/functions/jaccard_all.R")
 
+names(ASVs_cat_df)[-1]
 
+test_jaccard_airi_imp_cs1 <- jaccard_all(airi_mosj_dep_imp, all_items = names(ASVs_cat_df)[-1])
 
+# testing run time  
+multi_options_cs1_jaccard_by_methods <- multi_options_cs1 %>% 
+  filter(method != "None") %>% 
+  group_by(RHS, method, subset) %>% 
+  nest() %>% 
+  mutate(jaccard = map(.x = data, .f = ~jaccard_all(.x, names(ASVs_cat_df)[-1])))
+
+##> for subsets of rules pairwise jaccard is very managable
 

@@ -1,4 +1,5 @@
-jaccard_all <- function(ruleset){
+jaccard_all <- function(ruleset, all_items, ...){
+  
   # jaccard formula for sets a and b
   jaccard <- function(a, b){
     intersection = length(intersect(a, b))
@@ -24,10 +25,11 @@ jaccard_all <- function(ruleset){
   comparisons <- set_comparisons(ruleset = ruleset)
   
   # to calculate jaccard between two rules
-  ruleJaccard <- function(ruleset, p1, p2){
+  ruleJaccard <- function(ruleset, p1, p2, all_items, ...){
+    xitems <- all_items # trying to avoid conflicts
     #
     rule_items <- ruleset %>% 
-      mutate(item_sets = str_extract_all(LHS, paste(bm_items, collapse='|'))) %>% 
+      mutate(item_sets = str_extract_all(LHS, paste(xitems, collapse='|'))) %>% 
       pull(item_sets)
     #
     a <- rule_items[[p1]]
@@ -43,7 +45,8 @@ jaccard_all <- function(ruleset){
                           .y = comparisons$X2,
                           .f = ~ruleJaccard(ruleset, 
                                             p1 = .x, 
-                                            p2 = .y)) %>% 
+                                            p2 = .y,
+                                            all_items = all_items)) %>% 
     unlist()
   
   #
