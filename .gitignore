@@ -66,3 +66,10 @@ repo/
 
 rule-sets/emose_rules_df.csv
 rule-sets/mosj_full_rules_set_as_data_frame.csv
+
+#
+reporting_BCD.html
+R/reporting_BM.html
+data/diabetes.csv
+jaccard_scores_df_BCD
+
