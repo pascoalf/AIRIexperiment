@@ -172,11 +172,69 @@ names(ASVs_cat_df)[-1]
 test_jaccard_airi_imp_cs1 <- jaccard_all(airi_mosj_dep_imp, all_items = names(ASVs_cat_df)[-1])
 
 # testing run time  
-multi_options_cs1_jaccard_by_methods <- multi_options_cs1 %>% 
-  filter(method != "None") %>% 
+cs1_jaccard_AIRI <- multi_options_cs1 %>% 
+  filter(str_detect(method, "AIRI")) %>% 
   group_by(RHS, method, subset) %>% 
   nest() %>% 
   mutate(jaccard = map(.x = data, .f = ~jaccard_all(.x, names(ASVs_cat_df)[-1])))
 
+# AIRI - jaccard overview
+cs1_jaccard_AIRI %>% 
+  unnest(jaccard) %>% 
+  ggplot(aes(method, jaccard, col = RHS)) + 
+  geom_point()
+  
+cs1_jaccard_AIRI %>% 
+  unnest(jaccard) %>% 
+  ggplot(aes(method, jaccard)) + 
+  stat_summary()
+
+cs1_jaccard_AIRI %>% 
+  unnest(jaccard) %>% 
+  ggplot(aes(method, jaccard, col = RHS)) + 
+  stat_summary()
+
 ##> for subsets of rules pairwise jaccard is very managable
+# confidence methods
+conf_start <- Sys.time()
+cs1_jaccard_conf <- multi_options_cs1 %>% 
+  filter(str_detect(method, "Conf.")) %>% 
+  group_by(RHS, method, subset) %>% 
+  nest() %>% 
+  mutate(jaccard = map(.x = data, .f = ~jaccard_all(.x, names(ASVs_cat_df)[-1])))
+conf_end <- Sys.time()
+save(list = ls(), file = "last_session")
+
+# conviction  methods
+conv_start <- Sys.time()
+cs1_jaccard_conv <- multi_options_cs1 %>% 
+  filter(str_detect(method, "Conv.")) %>% 
+  group_by(RHS, method, subset) %>% 
+  nest() %>% 
+  mutate(jaccard = map(.x = data, .f = ~jaccard_all(.x, names(ASVs_cat_df)[-1])))
+conv_end <- Sys.time()
+
+save(list = ls(), file = "last_session")
+
+lift_start <- Sys.time()
+# Lift methods
+cs1_jaccard_lift <- multi_options_cs1 %>% 
+  filter(str_detect(method, "Lift")) %>% 
+  group_by(RHS, method, subset) %>% 
+  nest() %>% 
+  mutate(jaccard = map(.x = data, .f = ~jaccard_all(.x, names(ASVs_cat_df)[-1])))
+lift_end <- Sys.time()
+#
+save(list = ls(), file = "last_session")
+
+#
+none_start <- Sys.time()
+cs1_jaccard_none <- multi_options_cs1 %>% 
+  filter(str_detect(method, "None")) %>% 
+  group_by(RHS, method, subset) %>% 
+  nest() %>% 
+  mutate(jaccard = map(.x = data, .f = ~jaccard_all(.x, names(ASVs_cat_df)[-1])))
+none_end <- Sys.time()
+
+save(list = ls(), file = "last_session")
 
