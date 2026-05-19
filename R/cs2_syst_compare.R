@@ -63,6 +63,26 @@ cs2_nrules_dep <- cs2_nrules_dep[,c(1,2,4,5)] %>% rbind(cs2_nrules_dep[,c(1,2,4,
 cs2_nrules<- cs2_nrules_all %>%
   rbind(cs2_nrules_dep)
 
+## plot number of rules
+cs2_nrules %>% 
+  mutate(metric = str_to_title(metric)) %>% 
+  ggplot(aes(score, nrules, col = subset)) + 
+  geom_point(alpha = 0.55) + 
+  geom_line(aes(group = subset), col = "grey20") +
+  geom_hline(yintercept = 1, lty = "dashed", col = "grey") +
+  facet_wrap(~metric, scale = "free") +
+  scale_y_log10() +
+  labs(y = "Number of rules (Log10)",
+       x = "Score",
+       col = "Subset") + 
+  theme_bw() + 
+  theme(panel.grid = element_blank(),
+        legend.position = "top",
+        strip.background = element_blank(),
+        strip.text = element_text(size = 12),
+        axis.text = element_text(size = 11),
+        axis.title = element_text(size = 12))
+
 ## plot
 grid.arrange(
   #
