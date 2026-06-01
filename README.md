@@ -1,6 +1,6 @@
-# Source code and data to reproduce paper: "AIRI: automatic interesting rules identification"
+# Source code and data to reproduce paper: "AIRItaxa: Automatic Interesting Rule Mining of Taxa in complex communities"
 
-This repository serves to share the original R code used to produce the results presented in the paper "AIRI: automatic interesting rules identification", which is currently undergoing double blind peer-review.
+This repository serves to share the original R code used to produce the results presented in the paper "AIRI: automatic interesting rules identification", which is currently undergoing peer-review.
 
 This repository is actively managged and will be updated until the paper is accepted for publication.
 
@@ -67,7 +67,7 @@ Assuming a dedicated environment with all the files in R/ and data/ directories 
 
 # Citation
 ## If you use AIRItaxa, please cite: 
-Pascoal F., Baptista, S.M., Costa R., Magalhães C., Branco P., AIRItaxa: Automatic Interesting Rule Mining of Taxa in complex communities. Under peer-revie.
+Pascoal F., Baptista, S.M., Costa R., Magalhães C., Branco P., AIRItaxa: Automatic Interesting Rule Mining of Taxa in complex communities. Under peer-review.
 
 ## Additional citation for source data
 If you use the source data available at this repository, please cite the original papers describing and presenting the datasets:
