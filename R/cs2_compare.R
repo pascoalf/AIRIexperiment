@@ -169,22 +169,3 @@ multi_options_cs2 %>%
   labs(y = "Mutual Information (mean \U2213 sd)",
        x = "Method",
        fill = "Subset")
-
-# calculate redundancy
-# Calc redundancy for all
-redund_df_cs2 <- multi_options_cs2 %>% 
-  group_by(method, subset) %>% 
-  nest() %>% 
-  mutate(redundancy = map(.x = data, .f = ~redundancy(.x))) %>% 
-  unnest(redundancy)
-
-redund_df_cs2 %>% 
-  mutate(redundancy = 100*redundancy) %>% 
-  ggplot(aes(method, redundancy, fill = subset)) +
-  geom_col(position = "dodge") + 
-  theme_classic() + 
-  theme(legend.position = "top") + 
-  labs(y = "Redundancy (%)", 
-       x = "Method",
-       fill = "Subset")
-
