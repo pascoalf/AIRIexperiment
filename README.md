@@ -66,8 +66,8 @@ Assuming a dedicated environment with all the files in R/ and data/ directories 
   4.4. cs2_syst_compare.R - systematic comparison for all metric values - EMOSE dataset
 
 # Citation
-## Source code citation
-Unavailable - paper undergoing double-blind peer review.
+## If you use AIRItaxa, please cite: 
+Pascoal F., Baptista, S.M., Costa R., Magalhães C., Branco P., AIRItaxa: Automatic Interesting Rule Mining of Taxa in complex communities. Under peer-revie.
 
 ## Additional citation for source data
 If you use the source data available at this repository, please cite the original papers describing and presenting the datasets:
