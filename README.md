@@ -1,8 +1,6 @@
-# Source code and data to reproduce paper: "AIRI: automatic interesting rules identification"
+# AIRI: automatic interesting rules identification
 
-This repository serves to share the original R code used to produce the results presented in the paper "AIRI: automatic interesting rules identification", which is currently undergoing double blind peer-review.
-
-This repository is actively managged and will be updated until the paper is accepted for publication.
+This is the main branch for general AIRI development. For AIRItaxa (currently under peer-review), please see the AIRItaxa branch: https://github.com/pascoalf/AIRIexperiment/tree/AIRItaxa
 
 # Source data files description (data/)
 
@@ -67,7 +65,8 @@ Assuming a dedicated environment with all the files in R/ and data/ directories 
 
 # Citation
 ## Source code citation
-Unavailable - paper undergoing double-blind peer review.
+
+See AIRItaxa branch: https://github.com/pascoalf/AIRIexperiment/tree/AIRItaxa
 
 ## Additional citation for source data
 If you use the source data available at this repository, please cite the original papers describing and presenting the datasets:
