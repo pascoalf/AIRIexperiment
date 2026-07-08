@@ -20,7 +20,7 @@ ASVs_cat_df <- ASVs_df %>%
 cs1_support_sensitivity <- run_support_sensitivity(data = ASVs_cat_df,
                                                    support_values = support_values,
                                                    key_prefix = "taxon=",
-                                                   case_study = "CS1")
+                                                   case_study = "Case study 1 (MOSJ)")
 
 ## Case study 2 - EMOSE
 if(!exists("emose_df")){
@@ -41,31 +41,38 @@ emose_df_selected <- emose_df %>%
 cs2_support_sensitivity <- run_support_sensitivity(data = emose_df_selected,
                                                    support_values = support_values,
                                                    key_prefix = "taxa=",
-                                                   case_study = "CS2")
+                                                   case_study = "Case study 2 (EMOSE)")
 
 support_sensitivity <- bind_rows(cs1_support_sensitivity,
                                  cs2_support_sensitivity)
 
 support_sensitivity_long <- support_sensitivity %>%
+  select(case_study, support, n_all_rules, n_dependent_rules, n_airi_improvement) %>%
+  rename(n_airi = n_airi_improvement) %>%
   pivot_longer(cols = starts_with("n_"),
                names_to = "rule_set",
                values_to = "n_rules") %>%
   mutate(rule_set = dplyr::recode(rule_set,
                                   n_all_rules = "All rules",
                                   n_dependent_rules = "Dependent rules",
-                                  n_airi_improvement = "AIRI by improvement",
-                                  n_airi_mutualInfo = "AIRI by mutual information",
-                                  n_airi_complexity = "AIRI by complexity"))
+                                  n_airi = "AIRI"))
 
 support_sensitivity_long %>%
   ggplot(aes(support, n_rules, col = rule_set)) +
   geom_point() +
   geom_line() +
+  geom_text(data = filter(support_sensitivity_long, rule_set == "AIRI"),
+            aes(label = n_rules),
+            vjust = -0.7,
+            show.legend = FALSE) +
   facet_wrap(~case_study, scales = "free_y") +
   scale_x_log10() +
-  scale_y_continuous(trans = scales::pseudo_log_trans(base = 10)) +
+  scale_y_continuous(trans = scales::pseudo_log_trans(base = 10),
+                     breaks = c(0, 1, 10, 100, 1000, 10000, 100000, 1000000),
+                     labels = scales::label_number()) +
   theme_classic() +
-  theme(legend.position = "top") +
+  theme(legend.position = "top",
+        panel.grid.major.y = element_line(colour = "grey85", linewidth = 0.3)) +
   labs(x = "Minimum support",
        y = "Number of rules",
        col = "Rule set")
