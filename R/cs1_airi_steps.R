@@ -85,17 +85,29 @@ full_rules_dependent %>%
 
 ## dependent rules - nonredundant
 # key items are in taxonomy var
+extract_lhs_taxon <- function(rules){
+  lhs_items <- LIST(lhs(rules), decode = TRUE)
+
+  map_chr(lhs_items, function(items){
+    taxon_items <- items[str_starts(items, "taxon=")]
+
+    if(length(taxon_items) == 0){
+      return(NA_character_)
+    }
+
+    str_remove(taxon_items[1], "^taxon=")
+  })
+}
+
+full_rules_dependent_df <- full_rules_dependent %>%
+  DATAFRAME() %>%
+  mutate(taxon = factor(extract_lhs_taxon(full_rules_dependent)),
+         LHSsize = size(lhs(full_rules_dependent)))
+
 # Remove redundancy by Improvement
 dependent_rules_non_redundant <- 
-  full_rules_dependent %>% 
-  DATAFRAME() %>% 
-  filter(str_detect(LHS, "taxon")) %>%  # remove rules without key items
-  separate_wider_delim(LHS, ",", names = "taxon", too_many = "debug") %>% 
-  select(-LHS_ok, -LHS_pieces) %>% 
-  mutate(taxon = factor(str_remove(taxon, "\\{taxon=")),
-         taxon = str_remove(taxon, "\\}"),
-         taxon = str_remove(taxon, ","),
-         taxon = factor(taxon)) %>%  
+  full_rules_dependent_df %>% 
+  filter(!is.na(taxon)) %>%  # remove rules without key items
   group_by(taxon) %>% 
   arrange(desc(improvement)) %>% 
   slice_head(n = 1) %>% 
@@ -106,42 +118,25 @@ dependent_rules_non_redundant %>% View()
 
 ## remove redundancy by Complexity
 non_redundant_by_complexity <- 
-  full_rules_dependent %>%
-  DATAFRAME() %>% 
-  mutate(LHSsize = str_count(LHS, ",")) %>% 
-  filter(str_detect(LHS, "taxon")) %>%  # remove rules without key items
-  separate_wider_delim(LHS, ",", names = "taxon", too_many = "debug") %>% 
-  select(-LHS_ok, -LHS_pieces) %>% 
-  mutate(taxon = str_remove(taxon, "\\{taxon="),
-         taxon = str_remove(taxon, "\\}"),
-         taxon = str_remove(taxon, ","),
-         taxon = factor(taxon)) %>%
+  full_rules_dependent_df %>% 
+  filter(!is.na(taxon)) %>%  # remove rules without key items
   group_by(taxon) %>%
   arrange(desc(LHSsize)) %>% 
   slice_head(n = 1) %>% 
   ungroup() %>% 
   select(LHS, RHS, support,	confidence, coverage,	lift,	count,	conviction,	mutualInfo,	improvement) %>% 
-  filter(str_detect(LHS, "taxon")) %>% # to focus only on LHS with taxonomy
   arrange(desc(conviction))
 
 #
 ## remove redundancy by mutual information
 non_redundant_by_mutualInfo <- 
-  full_rules_dependent %>%
-  DATAFRAME() %>% 
-  filter(str_detect(LHS, "taxon")) %>%  # remove rules without key items
-  separate_wider_delim(LHS, ",", names = "taxon", too_many = "debug") %>% 
-  select(-LHS_ok, -LHS_pieces) %>% 
-  mutate(taxon = str_remove(taxon, "\\{taxon="),
-         taxon = str_remove(taxon, "\\}"),
-         taxon = str_remove(taxon, ","),
-         taxon = factor(taxon)) %>%
+  full_rules_dependent_df %>% 
+  filter(!is.na(taxon)) %>%  # remove rules without key items
   group_by(taxon) %>%
   arrange(desc(mutualInfo)) %>% 
   slice_head(n = 1) %>% 
   ungroup() %>% 
   select(LHS, RHS, support,	confidence, coverage,	lift,	count,	conviction,	mutualInfo,	improvement) %>% 
-  filter(str_detect(LHS, "taxon")) %>% # to focus only on LHS with taxonomy
   arrange(desc(conviction))
 
 
@@ -208,5 +203,4 @@ ggVennDiagram(x = list(non_redundant_by_mutualInfo$LHS,
 #non_redundant_by_mutualInfo %>% write.csv("rule-sets/mosj_airi_by_mutual_information.csv")
 #non_redundant_by_complexity %>% write.csv("rule-sets/mosj_airi_by_complexity.csv")
 #dependent_rules_non_redundant %>% write.csv("rule-sets/mosj_airi_by_improvement.csv")
-
 
