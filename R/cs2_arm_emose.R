@@ -1,7 +1,15 @@
 ## ARM - EMOSE
+source("R/prepare_session.R")
+
 set.seed(123)
 # load env and ASVs data
-load("data/emose_df")
+if(!exists("emose_df")){
+  if(file.exists("data/emose_df")){
+    load("data/emose_df")
+  } else {
+    source("R/cs2_prepare_emose_data.R")
+  }
+}
 
 # all features must be categorical 
 emose_df_selected <- emose_df %>% ungroup() %>% 
@@ -49,7 +57,6 @@ emose_rules_df %>%
        fill = "Lift: ")
 
 emose_rules %>% summary()
-
 
 
 

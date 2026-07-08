@@ -1,20 +1,17 @@
 # Compare methods - case study 2
 
 # CS1 compare alternatives
+source("R/prepare_session.R")
 
-## function to get rules by approach
-get_rules_by <- function(rules, by = NULL, metric = "confidence", score = NULL){
-  if(metric == "confidence"){
-    temp_rules <- rules[quality(rules)$confidence >= score]    
-  } else if(metric == "lift"){
-    temp_rules <- rules[quality(rules)$lift >= score]
-  } else if(metric == "conviction"){
-    temp_rules <- rules[quality(rules)$conviction >= score]
-  } else {stop("select valid metric")}
-  quality(temp_rules)$mutualInfo <- interestMeasure(temp_rules, measure = "mutualInformation")
-  quality(temp_rules)$improvement <- interestMeasure(temp_rules, measure = "improvement")
-  return(temp_rules)
+if(!exists("emose_rules") ||
+   !exists("emose_rules_dependent") ||
+   !exists("emose_dependent_rules_non_redundant") ||
+   !exists("emose_non_redundant_by_mutualInfo") ||
+   !exists("emose_non_redundant_by_complexity")){
+  source("R/cs2_airi_emose.R")
 }
+
+source("R/functions/get_rules_by.R")
 
 # Flat threshold approach
 cs2.conf.90_all  <- get_rules_by(emose_rules, metric = "confidence", score = 0.9)

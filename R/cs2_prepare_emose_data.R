@@ -1,4 +1,5 @@
 # prepare emose data
+source("R/prepare_session.R")
 
 ## load abundance tables curated by Pascoal et al., 2023
 load("./data/emose_curated_taxonomy")
@@ -100,6 +101,5 @@ emose_df <- emose_classified %>%
 
 #
 #save(emose_df, file = "data/emose_df")
-
 
 

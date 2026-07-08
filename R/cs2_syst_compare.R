@@ -1,3 +1,9 @@
+source("R/prepare_session.R")
+
+if(!exists("emose_rules") || !exists("emose_rules_dependent")){
+  source("R/cs2_airi_emose.R")
+}
+
 # load functions
 source("R/functions/get_rules_by.R")
 source("R/functions/count_rules_by.R")

@@ -1,4 +1,9 @@
 ## AIRI - emose 
+source("R/prepare_session.R")
+
+if(!exists("emose_rules") || !exists("emose_rules_df")){
+  source("R/cs2_arm_emose.R")
+}
 
 ## Step 1 - identify dependent rules
 # Chi-square test
@@ -86,16 +91,28 @@ emose_rules_dependent %>%
 
 ## dependent rules - nonredundant
 # key items are in taxonomy var
+extract_lhs_taxa <- function(rules){
+  lhs_items <- LIST(lhs(rules), decode = TRUE)
+
+  map_chr(lhs_items, function(items){
+    taxa_items <- items[str_starts(items, "taxa=")]
+
+    if(length(taxa_items) == 0){
+      return(NA_character_)
+    }
+
+    str_remove(taxa_items[1], "^taxa=")
+  })
+}
+
+emose_rules_dependent_df <- emose_rules_dependent %>%
+  DATAFRAME() %>%
+  mutate(taxa = factor(extract_lhs_taxa(emose_rules_dependent)),
+         LHSsize = size(lhs(emose_rules_dependent)))
+
 # Remove redundancy by Improvement
-emose_dependent_rules_non_redundant <- emose_rules_dependent %>% 
-  DATAFRAME() %>% 
-  filter(str_detect(LHS, "taxa")) %>%  # remove rules without key items
-  separate_wider_delim(LHS, ",", names = "taxa", too_many = "debug") %>% 
-  select(-LHS_ok, -LHS_pieces) %>% 
-  mutate(taxa = factor(str_remove(taxa, "\\{taxa=")),
-         taxa = str_remove(taxa, "\\}"),
-         taxa = str_remove(taxa, ","),
-         taxa = factor(taxa)) %>% 
+emose_dependent_rules_non_redundant <- emose_rules_dependent_df %>% 
+  filter(!is.na(taxa)) %>%  # remove rules without key items
   group_by(taxa) %>% 
   arrange(desc(improvement)) %>% 
   slice_head(n = 1) %>% 
@@ -106,43 +123,26 @@ emose_dependent_rules_non_redundant <- emose_rules_dependent %>%
 
 ## remove redundancy by Complexity
 emose_non_redundant_by_complexity <- 
-  emose_rules_dependent %>%
-  DATAFRAME() %>% 
-  mutate(LHSsize = str_count(LHS, ",")) %>% 
-  filter(str_detect(LHS, "taxa")) %>%  # remove rules without key items
-  separate_wider_delim(LHS, ",", names = "taxa", too_many = "debug") %>% 
-  select(-LHS_ok, -LHS_pieces) %>% 
-  mutate(taxa = str_remove(taxa, "\\{taxa="),
-         taxa = str_remove(taxa, "\\}"),
-         taxa = str_remove(taxa, ","),
-         taxa = factor(taxa)) %>%
+  emose_rules_dependent_df %>% 
+  filter(!is.na(taxa)) %>%  # remove rules without key items
   group_by(taxa) %>%
   arrange(desc(LHSsize)) %>% 
   slice_head(n = 1) %>% 
   ungroup() %>% 
   select(LHS, RHS, support,	confidence, coverage,	lift,	count,	conviction,	mutualInfo,	improvement) %>% 
-  filter(str_detect(LHS, "taxa")) %>% # to focus only on LHS with taxonomy
   arrange(desc(conviction))
 
 #emose_non_redundant_by_complexity %>% View()
 
 ## remove redundancy by mutual information
 emose_non_redundant_by_mutualInfo <- 
-  emose_rules_dependent %>%
-  DATAFRAME() %>% 
-  filter(str_detect(LHS, "taxa")) %>%  # remove rules without key items
-  separate_wider_delim(LHS, ",", names = "taxa", too_many = "debug") %>% 
-  select(-LHS_ok, -LHS_pieces) %>% 
-  mutate(taxa = str_remove(taxa, "\\{taxa="),
-         taxa = str_remove(taxa, "\\}"),
-         taxa = str_remove(taxa, ","),
-         taxa = factor(taxa)) %>%
+  emose_rules_dependent_df %>% 
+  filter(!is.na(taxa)) %>%  # remove rules without key items
   group_by(taxa) %>%
   arrange(desc(mutualInfo)) %>% 
   slice_head(n = 1) %>% 
   ungroup() %>% 
   select(LHS, RHS, support,	confidence, coverage,	lift,	count,	conviction,	mutualInfo,	improvement) %>% 
-  filter(str_detect(LHS, "taxa")) %>% # to focus only on LHS with taxaomy
   arrange(desc(conviction))
 
 #emose_non_redundant_by_mutualInfo %>% View()
@@ -211,7 +211,6 @@ ggVennDiagram(x = list(emose_non_redundant_by_mutualInfo$LHS,
 emose_non_redundant_by_mutualInfo %>% write.csv("rule-sets/emose_airi_by_mutual_information.csv")
 emose_non_redundant_by_complexity %>% write.csv("rule-sets/emose_airi_by_complexity.csv")
 emose_dependent_rules_non_redundant %>% write.csv("rule-sets/emose_airi_by_improvement.csv")
-
 
 
 
