@@ -45,7 +45,8 @@ empty_airitaxa_df <- function(){
              coverage = numeric(),
              lift = numeric(),
              count = integer(),
-             chi_p_adj = numeric(),
+             dependence_p_adj = numeric(),
+             dependence_test = character(),
              conviction = numeric(),
              mutualInfo = numeric(),
              improvement = numeric(),
@@ -68,8 +69,13 @@ select_non_redundant_rules <- function(rules_df, metric){
 
 run_airitaxa <- function(rules,
                          key_prefix,
+                         dependence_method = "chisq",
                          p_adjust = "bonferroni",
                          alpha = 0.05){
+  if(!dependence_method %in% c("chisq", "fisher")){
+    stop("dependence_method must be 'chisq' or 'fisher'")
+  }
+
   if(length(rules) == 0){
     rules_df <- empty_airitaxa_df()
 
@@ -84,17 +90,25 @@ run_airitaxa <- function(rules,
 
   rules_df <- DATAFRAME(rules)
 
-  rules_df$chi_p_adj <- rules %>%
-    interestMeasure(measure = "chiSquared", significance = TRUE) %>%
-    p.adjust(method = p_adjust)
+  dependence_p_values <- if(dependence_method == "chisq"){
+    interestMeasure(rules, measure = "chiSquared", significance = TRUE)
+  } else {
+    interestMeasure(rules, measure = "fishersExactTest")
+  }
+
+  rules_df$dependence_p_adj <- p.adjust(dependence_p_values, method = p_adjust)
+
+  rules_df$dependence_test <- dependence_method
 
   rules_df$conviction <- rules %>%
     interestMeasure(measure = "Conviction")
 
   quality(rules)$conviction <- rules_df$conviction
-  quality(rules)$chi_p_adj <- rules_df$chi_p_adj
+  quality(rules)$dependence_p_adj <- rules_df$dependence_p_adj
+  quality(rules)$dependence_test <- rules_df$dependence_test
 
-  dependent_rules <- rules[quality(rules)$chi_p_adj < alpha,]
+  dependent_rules <- rules[!is.na(quality(rules)$dependence_p_adj) &
+                             quality(rules)$dependence_p_adj < alpha,]
 
   if(length(dependent_rules) == 0){
     dependent_rules_df <- empty_airitaxa_df()
@@ -144,6 +158,7 @@ run_support_sensitivity <- function(data,
                                     minlen = 2,
                                     maxlen = 14,
                                     verbose = FALSE,
+                                    dependence_method = "chisq",
                                     p_adjust = "bonferroni",
                                     alpha = 0.05){
   map_dfr(support_values, function(support){
@@ -156,6 +171,7 @@ run_support_sensitivity <- function(data,
 
     airitaxa_result <- run_airitaxa(rules = rules,
                                     key_prefix = key_prefix,
+                                    dependence_method = dependence_method,
                                     p_adjust = p_adjust,
                                     alpha = alpha)
 
