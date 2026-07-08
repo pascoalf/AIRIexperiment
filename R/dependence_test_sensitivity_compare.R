@@ -88,7 +88,7 @@ dependence_test_sensitivity_long %>%
             position = position_dodge(width = 0.12),
             vjust = -0.7,
             show.legend = FALSE, col = "black") +
-  facet_wrap(~case_study, scales = "free_y") +
+  facet_wrap(~case_study) +
   scale_x_log10() +
   scale_y_continuous(trans = scales::pseudo_log_trans(base = 10),
                      breaks = c(0, 1, 10, 100, 1000, 10000, 100000, 1000000),
