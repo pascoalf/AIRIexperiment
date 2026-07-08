@@ -73,6 +73,6 @@ support_sensitivity_long %>%
   theme_classic() +
   theme(legend.position = "top",
         panel.grid.major.y = element_line(colour = "grey85", linewidth = 0.3)) +
-  labs(x = "Minimum support",
+  labs(x = "Minimum support (%)",
        y = "Number of rules",
        col = "Rule set")
