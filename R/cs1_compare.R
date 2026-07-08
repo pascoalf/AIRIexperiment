@@ -1,18 +1,15 @@
 # CS1 compare alternatives
+source("R/prepare_session.R")
 
-## function to get rules by approach
-get_rules_by <- function(rules, by = NULL, metric = "confidence", score = NULL){
-  if(metric == "confidence"){
-    temp_rules <- rules[quality(rules)$confidence >= score]    
-  } else if(metric == "lift"){
-    temp_rules <- rules[quality(rules)$lift >= score]
-  } else if(metric == "conviction"){
-    temp_rules <- rules[quality(rules)$conviction >= score]
-  } else {stop("select valid metric")}
-  quality(temp_rules)$mutualInfo <- interestMeasure(temp_rules, measure = "mutualInformation")
-  quality(temp_rules)$improvement <- interestMeasure(temp_rules, measure = "improvement")
-  return(temp_rules)
+if(!exists("full_rules") ||
+   !exists("full_rules_dependent") ||
+   !exists("dependent_rules_non_redundant") ||
+   !exists("non_redundant_by_mutualInfo") ||
+   !exists("non_redundant_by_complexity")){
+  source("R/cs1_airi_steps.R")
 }
+
+source("R/functions/get_rules_by.R")
 
 # Flat threshold approach
 conf.90_all  <- get_rules_by(full_rules, metric = "confidence", score = 0.9)
@@ -162,4 +159,3 @@ count_mosj_rules %>%
        x = "Method",
        fill = "Subset",
        tag = "Case study 1")
-

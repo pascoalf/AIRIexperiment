@@ -1,4 +1,10 @@
 # Association rule mining
+source("R/prepare_session.R")
+
+if(!exists("env_cat")){
+  source("R/cs1_prepare_metadata.R")
+}
+
 # association rule mining 
 set.seed(123)
 # load env and ASVs data
@@ -65,7 +71,6 @@ full_rules_df %>%
        fill = "Lift: ")
 
 full_rules %>% summary()
-
 
 
 

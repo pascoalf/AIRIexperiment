@@ -1,4 +1,9 @@
 # systematic comparisons
+source("R/prepare_session.R")
+
+if(!exists("full_rules") || !exists("full_rules_dependent")){
+  source("R/cs1_airi_steps.R")
+}
 
 # load functions
 source("R/functions/get_rules_by.R")

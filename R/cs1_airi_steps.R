@@ -1,4 +1,9 @@
 # AIRI steps
+source("R/prepare_session.R")
+
+if(!exists("full_rules") || !exists("full_rules_df")){
+  source("R/cs1_arm.R")
+}
 
 ## Step 1 - identify dependent rules
 # Chi-square test
@@ -114,7 +119,9 @@ dependent_rules_non_redundant <-
   ungroup() %>% 
   select(LHS, RHS, support,	confidence, coverage,	lift,	count,	conviction,	mutualInfo,	improvement) 
 
-dependent_rules_non_redundant %>% View()
+if(interactive()){
+  dependent_rules_non_redundant %>% View()
+}
 
 ## remove redundancy by Complexity
 non_redundant_by_complexity <- 
@@ -203,4 +210,3 @@ ggVennDiagram(x = list(non_redundant_by_mutualInfo$LHS,
 #non_redundant_by_mutualInfo %>% write.csv("rule-sets/mosj_airi_by_mutual_information.csv")
 #non_redundant_by_complexity %>% write.csv("rule-sets/mosj_airi_by_complexity.csv")
 #dependent_rules_non_redundant %>% write.csv("rule-sets/mosj_airi_by_improvement.csv")
-
