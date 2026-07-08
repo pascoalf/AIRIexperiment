@@ -138,25 +138,25 @@ write.csv(airitaxa_runtime_memory,
 
 airitaxa_runtime_memory_long <- airitaxa_runtime_memory %>%
   select(case_study, sample_fraction, repeat_id,
-         runtime_seconds, peak_ram_used_mib,
-         n_all_rules, n_dependent_rules, n_airi_rules) %>%
-  pivot_longer(cols = c(runtime_seconds, peak_ram_used_mib,
-                        n_all_rules, n_dependent_rules, n_airi_rules),
+         runtime_seconds, peak_ram_used_mib) %>%
+  pivot_longer(cols = c(runtime_seconds, peak_ram_used_mib),
                names_to = "metric",
                values_to = "value") %>%
   mutate(metric = dplyr::recode(metric,
                                 runtime_seconds = "Runtime (seconds)",
-                                peak_ram_used_mib = "Peak RAM used (MiB)",
-                                n_all_rules = "All rules",
-                                n_dependent_rules = "Dependent rules",
-                                n_airi_rules = "AIRI rules"))
+                                peak_ram_used_mib = "Peak RAM used (MiB)"))
 
-airitaxa_runtime_memory_long %>%
-  ggplot(aes(sample_fraction, value)) +
+airitaxa_runtime_memory_long %>% 
+  filter(metric %in% c("Runtime (seconds)","Peak RAM used (MiB)")) %>%
+  ggplot(aes(sample_fraction, value, 
+             col = case_study, linetype = case_study)) +
   geom_point(alpha = 0.55) +
-  stat_summary(fun = median, geom = "line", aes(group = 1), linewidth = 0.6) +
-  facet_grid(metric ~ case_study, scales = "free_y") +
+  stat_summary(fun = median, geom = "line", linewidth = 0.6) +
+  facet_wrap(~metric, scales = "free_y", ncol = 1) +
   theme_classic() +
-  theme(panel.grid.major.y = element_line(colour = "grey85", linewidth = 0.3)) +
+  theme(legend.position = "top",
+        panel.grid.major.y = element_line(colour = "grey85", linewidth = 0.3)) +
   labs(x = "Sample fraction",
-       y = "Value")
+       y = "Value",
+       col = "Case study",
+       linetype = "Case study")
