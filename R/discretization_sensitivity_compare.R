@@ -96,25 +96,82 @@ make_cs1_arm_data <- function(env_cat){
     select(-Sample, -Station)
 }
 
+format_airi_rules <- function(rules_df,
+                              airi_metric,
+                              support_value,
+                              discretization_name){
+  rules_df %>%
+    mutate(discretization = discretization_name,
+           discretization_method = discretization_labels[[discretization_name]],
+           min_support = support_value,
+           airi_metric = airi_metric,
+           .before = 1) %>%
+    rename(rule_support = support)
+}
+
+collect_airi_rules <- function(airitaxa_result,
+                               support_value,
+                               discretization_name){
+  bind_rows(
+    format_airi_rules(airitaxa_result$by_improvement,
+                      airi_metric = "improvement",
+                      support_value = support_value,
+                      discretization_name = discretization_name),
+    format_airi_rules(airitaxa_result$by_mutualInfo,
+                      airi_metric = "mutual_information",
+                      support_value = support_value,
+                      discretization_name = discretization_name),
+    format_airi_rules(airitaxa_result$by_complexity,
+                      airi_metric = "complexity",
+                      support_value = support_value,
+                      discretization_name = discretization_name)
+  )
+}
+
 run_discretization_sensitivity <- function(option, discretization_name){
   env_cat <- make_env_cat_by_discretization(env_data = env_data,
                                             option = option)
 
   ASVs_cat_df <- make_cs1_arm_data(env_cat)
 
-  run_support_sensitivity(data = ASVs_cat_df,
-                          support_values = support_values,
-                          key_prefix = "taxon=",
-                          case_study = discretization_labels[[discretization_name]]) %>%
-    mutate(discretization = discretization_name,
-           discretization_method = discretization_labels[[discretization_name]],
-           .before = support)
+  support_runs <- map(support_values, function(support_value){
+    rules <- mine_classification_rules(data = ASVs_cat_df,
+                                       support = support_value)
+
+    airitaxa_result <- run_airitaxa(rules = rules,
+                                    key_prefix = "taxon=")
+
+    list(summary = summarise_airitaxa_result(airitaxa_result = airitaxa_result,
+                                             support = support_value,
+                                             case_study = discretization_labels[[discretization_name]]) %>%
+           mutate(discretization = discretization_name,
+                  discretization_method = discretization_labels[[discretization_name]],
+                  .before = support),
+         airi_rules = collect_airi_rules(airitaxa_result = airitaxa_result,
+                                         support_value = support_value,
+                                         discretization_name = discretization_name))
+  })
+
+  list(summary = map_dfr(support_runs, "summary"),
+       airi_rules = map_dfr(support_runs, "airi_rules"))
 }
 
 env_data <- readRDS("./data/mosj_env_data.rds")
 
-discretization_sensitivity <- imap_dfr(discretization_options,
-                                       run_discretization_sensitivity)
+discretization_runs <- imap(discretization_options,
+                            run_discretization_sensitivity)
+
+discretization_sensitivity <- map_dfr(discretization_runs, "summary")
+
+discretization_airi_rules <- map_dfr(discretization_runs, "airi_rules")
+
+dir.create("rule-sets/discretization_sensitivity",
+           showWarnings = FALSE,
+           recursive = TRUE)
+
+write.csv(discretization_airi_rules,
+          "rule-sets/discretization_sensitivity/cs1_airi_rules_by_discretization.csv",
+          row.names = FALSE)
 
 discretization_sensitivity_long <- discretization_sensitivity %>%
   select(discretization_method, support, n_all_rules, n_dependent_rules, n_airi_improvement) %>%
