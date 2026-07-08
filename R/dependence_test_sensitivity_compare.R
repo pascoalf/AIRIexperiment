@@ -85,8 +85,9 @@ dependence_test_sensitivity_long %>%
   geom_line() +
   geom_text(data = filter(dependence_test_sensitivity_long, rule_set == "AIRI"),
             aes(label = n_rules),
+            position = position_dodge(width = 0.12),
             vjust = -0.7,
-            show.legend = FALSE) +
+            show.legend = FALSE, col = "black") +
   facet_wrap(~case_study, scales = "free_y") +
   scale_x_log10() +
   scale_y_continuous(trans = scales::pseudo_log_trans(base = 10),
