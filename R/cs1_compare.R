@@ -1,5 +1,6 @@
 # CS1 compare alternatives
 source("R/prepare_session.R")
+source("R/plot_helper.R")
 
 if(!exists("full_rules") ||
    !exists("full_rules_dependent") ||
@@ -144,18 +145,6 @@ multi_options_cs1 <- airi_mosj_dep_comp %>%
 count_mosj_rules <- multi_options_cs1 %>% 
   group_by(method, subset) %>% 
   count()
-count_mosj_rules %>% 
-  ggplot(aes(method, n , fill = subset)) + 
-  geom_col(position = "dodge") + 
-  scale_y_log10() + 
-  theme_classic() + 
-  theme(legend.position = "top",
-        axis.text.x = element_text(size = 12, angle = 45, vjust = 0.7),
-        axis.text.y = element_text(size = 12),
-        legend.text = element_text(size = 12),
-        legend.title = element_text(size = 12),
-        axis.title = element_text(size =12)) +
-  labs(y = "Number of rules (Log10 scale)",
-       x = "Method",
-       fill = "Subset",
-       tag = "Case study 1")
+
+plot_rule_count_comparison(count_mosj_rules,
+                           title = "Case study 1 (MOSJ)")

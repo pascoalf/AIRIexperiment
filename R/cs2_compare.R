@@ -1,7 +1,8 @@
 # Compare methods - case study 2
+source("R/prepare_session.R")
+source("R/plot_helper.R")
 
 # CS1 compare alternatives
-source("R/prepare_session.R")
 
 if(!exists("emose_rules") ||
    !exists("emose_rules_dependent") ||
@@ -147,15 +148,8 @@ cs2.count_emose_rules <- multi_options_cs2 %>%
   group_by(method, subset) %>% 
   count()
 #
-cs2.count_emose_rules %>% 
-  ggplot(aes(method, n , fill = subset)) + 
-  geom_col(position = "dodge") + 
-  scale_y_log10() + 
-  theme_classic() + 
-  theme(legend.position = "top") +
-  labs(y = "Number of rules (Log10 scale)",
-       x = "Method",
-       fill = "Subset")
+plot_rule_count_comparison(cs2.count_emose_rules,
+                           title = "Case study 2 (EMOSE)")
 
 #
 multi_options_cs2 %>% 

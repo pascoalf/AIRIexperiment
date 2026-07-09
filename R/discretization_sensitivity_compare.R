@@ -1,5 +1,6 @@
 # Compare metadata discretization methods for case study 1
 source("R/prepare_session.R")
+source("R/plot_helper.R")
 source("R/functions/airitaxa_pipeline.R")
 
 set.seed(123)
@@ -193,13 +194,10 @@ discretization_sensitivity_long %>%
             vjust = -0.7,
             show.legend = FALSE) +
   facet_wrap(~discretization_method, scales = "free_y") +
-  scale_x_log10() +
-  scale_y_continuous(trans = scales::pseudo_log_trans(base = 10),
-                     breaks = c(0, 1, 10, 100, 1000, 10000, 100000, 1000000),
-                     labels = scales::label_number()) +
-  theme_classic() +
-  theme(legend.position = "top",
-        panel.grid.major.y = element_line(colour = "grey85", linewidth = 0.3)) +
-  labs(x = "Minimum support",
+  scale_color_manual(values = airi_rule_set_colors) +
+  scale_x_log10(labels = scales::label_percent(accuracy = 0.01)) +
+  airi_pseudo_log_y() +
+  airi_plot_theme() +
+  labs(x = "Minimum support (%)",
        y = "Number of rules",
        col = "Rule set")

@@ -1,5 +1,6 @@
 # Runtime and RAM benchmark for ARM + AIRItaxa
 source("R/prepare_session.R")
+source("R/plot_helper.R")
 source("R/functions/airitaxa_pipeline.R")
 
 set.seed(123)
@@ -181,9 +182,9 @@ airitaxa_runtime_memory_long %>%
   geom_point(alpha = 0.55) +
   stat_summary(fun = median, geom = "line", linewidth = 0.6) +
   facet_wrap(~metric, scales = "free_y", ncol = 1) +
-  theme_classic() +
-  theme(legend.position = "top",
-        panel.grid.major.y = element_line(colour = "grey85", linewidth = 0.3)) +
+  scale_color_manual(values = airi_case_study_colors) +
+  scale_x_continuous(labels = scales::label_percent(accuracy = 1)) +
+  airi_plot_theme() +
   labs(x = "Sample fraction",
        y = "Value",
        col = "Case study",

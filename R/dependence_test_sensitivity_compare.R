@@ -1,5 +1,6 @@
 # Compare dependence tests for ARM + AIRItaxa in both case studies
 source("R/prepare_session.R")
+source("R/plot_helper.R")
 source("R/functions/airitaxa_pipeline.R")
 
 support_values <- c(0.0005, 0.001, 0.002, 0.005, 0.01)
@@ -89,14 +90,11 @@ dependence_test_sensitivity_long %>%
             vjust = -0.7,
             show.legend = FALSE, col = "black") +
   facet_wrap(~case_study) +
-  scale_x_log10() +
-  scale_y_continuous(trans = scales::pseudo_log_trans(base = 10),
-                     breaks = c(0, 1, 10, 100, 1000, 10000, 100000, 1000000),
-                     labels = scales::label_number()) +
-  theme_classic() +
-  theme(legend.position = "top",
-        panel.grid.major.y = element_line(colour = "grey85", linewidth = 0.3)) +
-  labs(x = "Minimum support",
+  scale_color_manual(values = airi_rule_set_colors) +
+  scale_x_log10(labels = scales::label_percent(accuracy = 0.01)) +
+  airi_pseudo_log_y() +
+  airi_plot_theme() +
+  labs(x = "Minimum support (%)",
        y = "Number of rules",
        col = "Rule set",
        linetype = "Dependence test",

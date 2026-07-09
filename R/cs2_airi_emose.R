@@ -1,5 +1,6 @@
 ## AIRI - emose 
 source("R/prepare_session.R")
+source("R/plot_helper.R")
 
 if(!exists("emose_rules") || !exists("emose_rules_df")){
   source("R/cs2_arm_emose.R")
@@ -44,49 +45,9 @@ quality(emose_rules_dependent)$mutualInfo <- interestMeasure(emose_rules_depende
 quality(emose_rules_dependent)$improvement <- interestMeasure(emose_rules_dependent,
                                                              measure = "improvement")
 
-quality(emose_rules_dependent) %>% 
-  filter(!is.infinite(conviction)) %>% 
-  pivot_longer(cols = c("mutualInfo", "improvement"),
-               values_to = "Score",
-               names_to = "Metric") %>% 
-  mutate(Metric = ifelse(Metric == "mutualInfo", "Mutual Information", "Improvement")) %>% 
-  ggplot(aes(conviction, 
-             confidence, 
-             col = lift,
-             size = Score)) + 
-  geom_point() + 
-  scale_color_gradient(low = reds[1], high = reds[9]) + 
-  theme_classic() + 
-  facet_grid(~Metric) + 
-  theme(legend.position = "top",
-        #axis.text = element_text(size = 14),
-        #axis.title = element_text(size = 16),
-        #legend.text = element_text(size = 14),
-        #legend.title = element_text(size = 14),
-        #strip.text = element_text(size = 14),
-        #strip.background = element_blank(),
-        panel.background = element_rect(fill = "grey89")) + 
-  labs(x = "Conviction",
-       y = "Confidence",
-       col = "Lift: ",
-       size = "Score: ")
+plot_dependent_rule_scores(quality(emose_rules_dependent))
 #
-emose_rules_dependent %>% 
-  DATAFRAME() %>% 
-  pivot_longer(cols = c("lift", "conviction", "confidence"),
-               names_to = "Metric",
-               values_to = "Score") %>%
-  mutate(RHS = str_remove(RHS, "\\{Classification="),
-         RHS = str_remove(RHS, "\\}")) %>% 
-  mutate(RHS = factor(RHS, levels = c("Rare", "Undetermined", "Abundant"))) %>% 
-  mutate(Metric = str_to_title(Metric)) %>%
-  ggplot(aes(RHS, Score)) + 
-  geom_boxplot() + 
-  theme_classic() +
-  theme(strip.text = element_text(size = 12),
-        axis.title = element_text(size = 12)) +
-  facet_wrap(~Metric, scales = "free")+
-  labs(x = "Consequent") 
+plot_dependent_rule_metric_distribution(emose_rules_dependent)
 
 
 ## dependent rules - nonredundant
@@ -162,28 +123,7 @@ emose_all_non_redundant <-
                                     str_detect(RHS, "Rare") ~ "Rare")) 
 
 
-gridExtra::grid.arrange(
-  emose_all_non_redundant %>% 
-    ggplot(aes(Metric, confidence)) + 
-    geom_boxplot(outlier.shape = NA) + 
-    geom_jitter(height = 0, width = 0.1, col = "grey") +
-    theme_classic() + 
-    theme(axis.title.x = element_blank())+
-    labs(y = "Confidence"),
-  emose_all_non_redundant %>% 
-    ggplot(aes(Metric, lift)) + 
-    geom_boxplot(outlier.shape = NA) +
-    geom_jitter(height = 0, width = 0.1, col = "grey") +
-    theme_classic() + 
-    theme(axis.title.x = element_blank())+
-    labs(y = "Lift"),
-  emose_all_non_redundant %>% 
-    ggplot(aes(Metric, conviction)) + 
-    geom_boxplot(outlier.shape = NA) + 
-    geom_jitter(height = 0, width = 0.1, col = "grey") +
-    theme_classic() +
-    theme(axis.title.x = element_blank())+
-    labs(y = "Conviction"), ncol = 3)
+plot_airi_selection_metric_distribution(emose_all_non_redundant)
 
 
 # percent shared rules
@@ -211,6 +151,5 @@ ggVennDiagram(x = list(emose_non_redundant_by_mutualInfo$LHS,
 emose_non_redundant_by_mutualInfo %>% write.csv("rule-sets/emose_airi_by_mutual_information.csv")
 emose_non_redundant_by_complexity %>% write.csv("rule-sets/emose_airi_by_complexity.csv")
 emose_dependent_rules_non_redundant %>% write.csv("rule-sets/emose_airi_by_improvement.csv")
-
 
 
