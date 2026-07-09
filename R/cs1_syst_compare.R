@@ -55,8 +55,10 @@ cs1_systematic_rule_count_plot_a <- cs1_nrules %>%
   geom_line(aes(group = subset), col = "grey20") +
   geom_hline(yintercept = 1, lty = "dashed", col = "grey") +
   facet_wrap(~metric, scale = "free") +
+  scale_x_continuous(n.breaks = 4) +
   scale_y_log10(labels = scales::label_number()) +
   airi_plot_theme() +
+  theme(axis.text.x = element_text(size = 8)) +
   labs(y = "Number of rules (log10 scale)",
        x = "Score",
        col = "Subset",
@@ -77,8 +79,10 @@ cs1_systematic_rule_count_plot_b <- cs1_nrules %>%
   geom_line(aes(group = subset), col = "grey20") +
   geom_hline(yintercept = 1, lty = "dashed", col = "grey") +
   facet_wrap(~metric, scale = "free") +
+  scale_x_continuous(n.breaks = 4) +
   scale_y_log10(labels = scales::label_number()) +
   airi_plot_theme() +
+  theme(axis.text.x = element_text(size = 8)) +
   labs(y = "Number of rules (log10 scale)",
        x = "Score",
        col = "Subset",

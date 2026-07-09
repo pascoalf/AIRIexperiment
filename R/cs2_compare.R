@@ -161,10 +161,12 @@ cs2_rule_count_comparison_plot
 #
 cs2_mutual_information_comparison_plot <- multi_options_cs2 %>% 
   ggplot(aes(method, mutualInfo, fill = subset)) + 
-  geom_boxplot(outlier.alpha = 0.5)+ 
-  theme_classic() + 
-  theme(legend.position = "top") +
-  labs(y = "Mutual Information (mean \U2213 sd)",
+  geom_boxplot(outlier.alpha = 0.5) +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
+  airi_plot_theme() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
+        plot.margin = margin(5.5, 5.5, 12, 5.5)) +
+  labs(y = "Mutual information",
        x = "Method",
        fill = "Subset")
 

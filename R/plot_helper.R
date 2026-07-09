@@ -4,9 +4,9 @@ airi_plot_theme <- function(base_size = 12){
   theme_classic(base_size = base_size) +
     theme(legend.position = "top",
           legend.title = element_text(size = base_size),
-          legend.text = element_text(size = base_size - 1),
+          legend.text = element_text(size = base_size - 2),
           axis.title = element_text(size = base_size),
-          axis.text = element_text(size = base_size - 1),
+          axis.text = element_text(size = base_size - 2),
           strip.background = element_blank(),
           strip.text = element_text(size = base_size, face = "bold"),
           panel.grid.major.y = element_line(colour = "grey85", linewidth = 0.3))
@@ -104,7 +104,10 @@ plot_dependent_rule_metric_distribution <- function(rules){
     ggplot(aes(RHS, Score)) +
     geom_boxplot(outlier.alpha = 0.35, width = 0.65) +
     facet_wrap(~Metric, scales = "free_y") +
+    scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
     airi_plot_theme() +
+    theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1),
+          plot.margin = margin(5.5, 5.5, 12, 5.5)) +
     labs(x = "Consequent",
          y = "Score")
 }
@@ -122,7 +125,10 @@ plot_airi_selection_metric_distribution <- function(non_redundant_rules){
     geom_boxplot(outlier.shape = NA, width = 0.65) +
     geom_jitter(width = 0.12, height = 0, alpha = 0.35, size = 1, col = "grey35") +
     facet_wrap(~Rule_metric, scales = "free_y", nrow = 1) +
+    scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
     airi_plot_theme() +
-    theme(axis.title.x = element_blank()) +
+    theme(axis.title.x = element_blank(),
+          axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1),
+          plot.margin = margin(5.5, 5.5, 12, 5.5)) +
     labs(y = "Score")
 }

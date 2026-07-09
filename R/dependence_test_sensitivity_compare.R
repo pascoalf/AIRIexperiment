@@ -94,6 +94,13 @@ dependence_test_sensitivity_plot <- dependence_test_sensitivity_long %>%
   scale_x_log10(labels = scales::label_percent(accuracy = 0.01)) +
   airi_pseudo_log_y() +
   airi_plot_theme() +
+  guides(col = guide_legend(nrow = 1),
+         linetype = guide_legend(nrow = 1),
+         shape = guide_legend(nrow = 1)) +
+  theme(legend.title = element_text(size = 9),
+        legend.text = element_text(size = 8),
+        legend.key.width = grid::unit(0.8, "lines"),
+        legend.spacing.x = grid::unit(0.15, "lines")) +
   labs(x = "Minimum support (%)",
        y = "Number of rules",
        col = "Rule set",

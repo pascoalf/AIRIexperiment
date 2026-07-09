@@ -155,3 +155,21 @@ save_airi_plot(cs1_rule_count_comparison_plot,
                height = 5)
 
 cs1_rule_count_comparison_plot
+
+cs1_mutual_information_comparison_plot <- multi_options_cs1 %>%
+  ggplot(aes(method, mutualInfo, fill = subset)) +
+  geom_boxplot(outlier.alpha = 0.5) +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
+  airi_plot_theme() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
+        plot.margin = margin(5.5, 5.5, 12, 5.5)) +
+  labs(y = "Mutual information",
+       x = "Method",
+       fill = "Subset")
+
+save_airi_plot(cs1_mutual_information_comparison_plot,
+               filename = "cs1_mutual_information_comparison.png",
+               width = 7,
+               height = 5)
+
+cs1_mutual_information_comparison_plot
