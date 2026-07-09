@@ -132,6 +132,34 @@ dir.create("rule-sets/benchmark",
            showWarnings = FALSE,
            recursive = TRUE)
 
+sink("rule-sets/benchmark/session_info.txt")
+cat("System information\n")
+print(Sys.info())
+cat("\nDetected CPU cores\n")
+print(parallel::detectCores())
+cat("\nR session information\n")
+print(sessionInfo())
+sink()
+
+hardware_info <- c("Hardware information")
+
+if(nzchar(Sys.which("lscpu"))){
+  hardware_info <- c(hardware_info,
+                     "",
+                     "lscpu",
+                     system2("lscpu", stdout = TRUE, stderr = TRUE))
+}
+
+if(nzchar(Sys.which("free"))){
+  hardware_info <- c(hardware_info,
+                     "",
+                     "free -h",
+                     system2("free", args = "-h", stdout = TRUE, stderr = TRUE))
+}
+
+writeLines(hardware_info,
+           "rule-sets/benchmark/hardware_info.txt")
+
 write.csv(airitaxa_runtime_memory,
           "rule-sets/benchmark/airitaxa_runtime_memory.csv",
           row.names = FALSE)
