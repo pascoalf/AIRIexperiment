@@ -78,3 +78,8 @@ jaccard_scores_df_BCD
 # sessio info
 rule-sets/benchmark/hardware_info.txt
 rule-sets/benchmark/session_info.txt
+
+# exploratory
+R/test_nirules.R
+rule-sets/niarules/
+
