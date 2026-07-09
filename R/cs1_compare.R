@@ -146,5 +146,12 @@ count_mosj_rules <- multi_options_cs1 %>%
   group_by(method, subset) %>% 
   count()
 
-plot_rule_count_comparison(count_mosj_rules,
-                           title = "Case study 1 (MOSJ)")
+cs1_rule_count_comparison_plot <- plot_rule_count_comparison(count_mosj_rules,
+                                                             title = "Case study 1 (MOSJ)")
+
+save_airi_plot(cs1_rule_count_comparison_plot,
+               filename = "cs1_rule_count_comparison.png",
+               width = 7,
+               height = 5)
+
+cs1_rule_count_comparison_plot

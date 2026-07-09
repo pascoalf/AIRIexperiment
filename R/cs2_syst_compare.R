@@ -1,4 +1,5 @@
 source("R/prepare_session.R")
+source("R/plot_helper.R")
 
 if(!exists("emose_rules") || !exists("emose_rules_dependent")){
   source("R/cs2_airi_emose.R")
@@ -44,41 +45,44 @@ cs2_nrules<- cs2_nrules_all %>%
   rbind(cs2_nrules_dep)
 
 ## plot
-cs2_nrules %>% 
-    mutate(metric = str_to_title(metric)) %>% 
-    ggplot(aes(score, nrules, col = subset)) + 
-    geom_point(alpha = 0.55) + 
-    geom_line(aes(group = subset), col = "grey20") +
-    geom_hline(yintercept = 1, lty = "dashed", col = "grey") +
-    facet_wrap(~metric, scale = "free") +
-    scale_y_log10() +
-    labs(y = "Number of rules (Log10)",
-         x = "Score",
-         col = "Subset", tag = "a") + 
-    theme_bw() + 
-    theme(panel.grid = element_blank(),
-          legend.position = "top",
-          strip.background = element_blank(),
-          strip.text = element_text(size = 12),
-          axis.text = element_text(size = 11),
-          axis.title = element_text(size = 12))
+cs2_systematic_rule_count_log_plot <- cs2_nrules %>% 
+  mutate(metric = str_to_title(metric)) %>% 
+  ggplot(aes(score, nrules, col = subset)) + 
+  geom_point(alpha = 0.55) + 
+  geom_line(aes(group = subset), col = "grey20") +
+  geom_hline(yintercept = 1, lty = "dashed", col = "grey") +
+  facet_wrap(~metric, scale = "free") +
+  scale_y_log10(labels = scales::label_number()) +
+  airi_plot_theme() +
+  labs(y = "Number of rules (log10 scale)",
+       x = "Score",
+       col = "Subset",
+       tag = "a")
+
+save_airi_plot(cs2_systematic_rule_count_log_plot,
+               filename = "cs2_systematic_rule_count_log.png",
+               width = 7,
+               height = 4.8)
+
+cs2_systematic_rule_count_log_plot
 
 # normal scale
-cs2_nrules %>% 
-    mutate(metric = str_to_title(metric)) %>% 
-    ggplot(aes(score, nrules, col = subset)) + 
-    geom_point(alpha = 0.55) + 
-    geom_line(aes(group = subset), col = "grey20") +
-    geom_hline(yintercept = 1, lty = "dashed", col = "grey") +
-    facet_wrap(~metric, scale = "free") +
-    #scale_y_log10() +
-    labs(y = "Number of rules",
-         x = "Score",
-         col = "Subset", tag = "a") + 
-    theme_bw() + 
-    theme(panel.grid = element_blank(),
-          legend.position = "top",
-          strip.background = element_blank(),
-          strip.text = element_text(size = 12),
-          axis.text = element_text(size = 11),
-          axis.title = element_text(size = 12))
+cs2_systematic_rule_count_linear_plot <- cs2_nrules %>% 
+  mutate(metric = str_to_title(metric)) %>% 
+  ggplot(aes(score, nrules, col = subset)) + 
+  geom_point(alpha = 0.55) + 
+  geom_line(aes(group = subset), col = "grey20") +
+  geom_hline(yintercept = 1, lty = "dashed", col = "grey") +
+  facet_wrap(~metric, scale = "free") +
+  airi_plot_theme() +
+  labs(y = "Number of rules",
+       x = "Score",
+       col = "Subset",
+       tag = "b")
+
+save_airi_plot(cs2_systematic_rule_count_linear_plot,
+               filename = "cs2_systematic_rule_count_linear.png",
+               width = 7,
+               height = 4.8)
+
+cs2_systematic_rule_count_linear_plot

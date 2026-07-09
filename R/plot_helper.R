@@ -27,6 +27,23 @@ airi_pseudo_log_y <- function(){
                      labels = scales::label_number())
 }
 
+save_airi_plot <- function(plot,
+                           filename,
+                           width = 7,
+                           height = 5,
+                           dpi = 600,
+                           units = "in"){
+  dir.create("figures", showWarnings = FALSE, recursive = TRUE)
+
+  ggplot2::ggsave(filename = file.path("figures", filename),
+                  plot = plot,
+                  width = width,
+                  height = height,
+                  dpi = dpi,
+                  units = units,
+                  bg = "white")
+}
+
 plot_rule_count_comparison <- function(rule_counts,
                                        title = NULL){
   rule_counts %>%

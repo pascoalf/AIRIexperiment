@@ -148,11 +148,18 @@ cs2.count_emose_rules <- multi_options_cs2 %>%
   group_by(method, subset) %>% 
   count()
 #
-plot_rule_count_comparison(cs2.count_emose_rules,
-                           title = "Case study 2 (EMOSE)")
+cs2_rule_count_comparison_plot <- plot_rule_count_comparison(cs2.count_emose_rules,
+                                                             title = "Case study 2 (EMOSE)")
+
+save_airi_plot(cs2_rule_count_comparison_plot,
+               filename = "cs2_rule_count_comparison.png",
+               width = 7,
+               height = 5)
+
+cs2_rule_count_comparison_plot
 
 #
-multi_options_cs2 %>% 
+cs2_mutual_information_comparison_plot <- multi_options_cs2 %>% 
   ggplot(aes(method, mutualInfo, fill = subset)) + 
   geom_boxplot(outlier.alpha = 0.5)+ 
   theme_classic() + 
@@ -160,3 +167,10 @@ multi_options_cs2 %>%
   labs(y = "Mutual Information (mean \U2213 sd)",
        x = "Method",
        fill = "Subset")
+
+save_airi_plot(cs2_mutual_information_comparison_plot,
+               filename = "cs2_mutual_information_comparison.png",
+               width = 7,
+               height = 5)
+
+cs2_mutual_information_comparison_plot

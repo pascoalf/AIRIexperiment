@@ -45,9 +45,23 @@ quality(emose_rules_dependent)$mutualInfo <- interestMeasure(emose_rules_depende
 quality(emose_rules_dependent)$improvement <- interestMeasure(emose_rules_dependent,
                                                              measure = "improvement")
 
-plot_dependent_rule_scores(quality(emose_rules_dependent))
+cs2_dependent_rule_scores_plot <- plot_dependent_rule_scores(quality(emose_rules_dependent))
+
+save_airi_plot(cs2_dependent_rule_scores_plot,
+               filename = "cs2_dependent_rule_scores.png",
+               width = 7,
+               height = 4.6)
+
+cs2_dependent_rule_scores_plot
 #
-plot_dependent_rule_metric_distribution(emose_rules_dependent)
+cs2_dependent_rule_metric_distribution_plot <- plot_dependent_rule_metric_distribution(emose_rules_dependent)
+
+save_airi_plot(cs2_dependent_rule_metric_distribution_plot,
+               filename = "cs2_dependent_rule_metric_distribution.png",
+               width = 7,
+               height = 4.6)
+
+cs2_dependent_rule_metric_distribution_plot
 
 
 ## dependent rules - nonredundant
@@ -123,7 +137,14 @@ emose_all_non_redundant <-
                                     str_detect(RHS, "Rare") ~ "Rare")) 
 
 
-plot_airi_selection_metric_distribution(emose_all_non_redundant)
+cs2_airi_selection_metric_distribution_plot <- plot_airi_selection_metric_distribution(emose_all_non_redundant)
+
+save_airi_plot(cs2_airi_selection_metric_distribution_plot,
+               filename = "cs2_airi_selection_metric_distribution.png",
+               width = 7,
+               height = 4.2)
+
+cs2_airi_selection_metric_distribution_plot
 
 
 # percent shared rules
@@ -133,23 +154,27 @@ emose_shared_rules <- emose_all_non_redundant %>%
   distinct()
 
 # venn diagram
-ggVennDiagram(x = list(emose_non_redundant_by_mutualInfo$LHS,
-                       emose_non_redundant_by_complexity$LHS,
-                       emose_dependent_rules_non_redundant$LHS),
-              category.names = c("Mutual\nInformation",
-                                 "Complexity",
-                                 "Improvement"),
-              label_size = 4) + 
+cs2_airi_shared_rules_venn_plot <- ggVennDiagram(x = list(emose_non_redundant_by_mutualInfo$LHS,
+                                                          emose_non_redundant_by_complexity$LHS,
+                                                          emose_dependent_rules_non_redundant$LHS),
+                                                 category.names = c("Mutual\nInformation",
+                                                                    "Complexity",
+                                                                    "Improvement"),
+                                                 label_size = 4) + 
   scale_fill_gradient(low = "#F4FAFE", high = "#4981BF") +
   guides(fill = "none") +
   xlim(-6,9)+
   ylim(-9,6)
 
+save_airi_plot(cs2_airi_shared_rules_venn_plot,
+               filename = "cs2_airi_shared_rules_venn.png",
+               width = 5.5,
+               height = 5)
 
+cs2_airi_shared_rules_venn_plot
 
 ## save non redundant rules for inspection
 emose_non_redundant_by_mutualInfo %>% write.csv("rule-sets/emose_airi_by_mutual_information.csv")
 emose_non_redundant_by_complexity %>% write.csv("rule-sets/emose_airi_by_complexity.csv")
 emose_dependent_rules_non_redundant %>% write.csv("rule-sets/emose_airi_by_improvement.csv")
-
 

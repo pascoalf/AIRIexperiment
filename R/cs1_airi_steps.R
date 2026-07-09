@@ -44,9 +44,23 @@ quality(full_rules_dependent)$mutualInfo <- interestMeasure(full_rules_dependent
 quality(full_rules_dependent)$improvement <- interestMeasure(full_rules_dependent,
                                                              measure = "improvement")
 
-plot_dependent_rule_scores(quality(full_rules_dependent))
+cs1_dependent_rule_scores_plot <- plot_dependent_rule_scores(quality(full_rules_dependent))
+
+save_airi_plot(cs1_dependent_rule_scores_plot,
+               filename = "cs1_dependent_rule_scores.png",
+               width = 7,
+               height = 4.6)
+
+cs1_dependent_rule_scores_plot
 #
-plot_dependent_rule_metric_distribution(full_rules_dependent)
+cs1_dependent_rule_metric_distribution_plot <- plot_dependent_rule_metric_distribution(full_rules_dependent)
+
+save_airi_plot(cs1_dependent_rule_metric_distribution_plot,
+               filename = "cs1_dependent_rule_metric_distribution.png",
+               width = 7,
+               height = 4.6)
+
+cs1_dependent_rule_metric_distribution_plot
 
 
 ## dependent rules - nonredundant
@@ -122,7 +136,14 @@ all_non_redundant <-
                                     str_detect(RHS, "Rare") ~ "Rare")) 
 
 
-plot_airi_selection_metric_distribution(all_non_redundant)
+cs1_airi_selection_metric_distribution_plot <- plot_airi_selection_metric_distribution(all_non_redundant)
+
+save_airi_plot(cs1_airi_selection_metric_distribution_plot,
+               filename = "cs1_airi_selection_metric_distribution.png",
+               width = 7,
+               height = 4.2)
+
+cs1_airi_selection_metric_distribution_plot
 
 
 # percent shared rules
@@ -132,19 +153,24 @@ shared_rules <- all_non_redundant %>%
   distinct()
 
 # venn diagram
-ggVennDiagram(x = list(non_redundant_by_mutualInfo$LHS,
-                       non_redundant_by_complexity$LHS,
-                       dependent_rules_non_redundant$LHS),
-              category.names = c("Mutual\nInformation",
-                                 "Complexity",
-                                 "Improvement"),
-              label_size = 4) + 
+cs1_airi_shared_rules_venn_plot <- ggVennDiagram(x = list(non_redundant_by_mutualInfo$LHS,
+                                                          non_redundant_by_complexity$LHS,
+                                                          dependent_rules_non_redundant$LHS),
+                                                 category.names = c("Mutual\nInformation",
+                                                                    "Complexity",
+                                                                    "Improvement"),
+                                                 label_size = 4) + 
   scale_fill_gradient(low = "#F4FAFE", high = "#4981BF") +
   guides(fill = "none") +
   xlim(-6,9)+
   ylim(-9,6)
 
+save_airi_plot(cs1_airi_shared_rules_venn_plot,
+               filename = "cs1_airi_shared_rules_venn.png",
+               width = 5.5,
+               height = 5)
 
+cs1_airi_shared_rules_venn_plot
 
 ## save non redundant rules for inspection
 #non_redundant_by_mutualInfo %>% write.csv("rule-sets/mosj_airi_by_mutual_information.csv")

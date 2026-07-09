@@ -175,7 +175,7 @@ airitaxa_runtime_memory_long <- airitaxa_runtime_memory %>%
                                 runtime_seconds = "Runtime (seconds)",
                                 peak_ram_used_mib = "Peak RAM used (MiB)"))
 
-airitaxa_runtime_memory_long %>% 
+runtime_memory_benchmark_plot <- airitaxa_runtime_memory_long %>% 
   filter(metric %in% c("Runtime (seconds)","Peak RAM used (MiB)")) %>%
   ggplot(aes(sample_fraction, value, 
              col = case_study, linetype = case_study)) +
@@ -189,3 +189,10 @@ airitaxa_runtime_memory_long %>%
        y = "Value",
        col = "Case study",
        linetype = "Case study")
+
+save_airi_plot(runtime_memory_benchmark_plot,
+               filename = "runtime_memory_benchmark.png",
+               width = 7,
+               height = 6.5)
+
+runtime_memory_benchmark_plot

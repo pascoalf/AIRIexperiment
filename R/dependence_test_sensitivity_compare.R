@@ -80,7 +80,7 @@ dependence_test_sensitivity_long <- dependence_test_sensitivity %>%
                                   n_dependent_rules = "Dependent rules",
                                   n_airi = "AIRI"))
 
-dependence_test_sensitivity_long %>%
+dependence_test_sensitivity_plot <- dependence_test_sensitivity_long %>%
   ggplot(aes(support, n_rules, col = rule_set, linetype = dependence_test)) +
   geom_point(aes(shape = dependence_test)) +
   geom_line() +
@@ -99,3 +99,10 @@ dependence_test_sensitivity_long %>%
        col = "Rule set",
        linetype = "Dependence test",
        shape = "Dependence test")
+
+save_airi_plot(dependence_test_sensitivity_plot,
+               filename = "dependence_test_sensitivity.png",
+               width = 7.5,
+               height = 4.8)
+
+dependence_test_sensitivity_plot

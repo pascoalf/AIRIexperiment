@@ -185,7 +185,7 @@ discretization_sensitivity_long <- discretization_sensitivity %>%
                                   n_dependent_rules = "Dependent rules",
                                   n_airi = "AIRI"))
 
-discretization_sensitivity_long %>%
+discretization_sensitivity_plot <- discretization_sensitivity_long %>%
   ggplot(aes(support, n_rules, col = rule_set)) +
   geom_point() +
   geom_line() +
@@ -201,3 +201,10 @@ discretization_sensitivity_long %>%
   labs(x = "Minimum support (%)",
        y = "Number of rules",
        col = "Rule set")
+
+save_airi_plot(discretization_sensitivity_plot,
+               filename = "discretization_sensitivity.png",
+               width = 8,
+               height = 5.8)
+
+discretization_sensitivity_plot

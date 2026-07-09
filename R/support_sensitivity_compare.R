@@ -58,7 +58,7 @@ support_sensitivity_long <- support_sensitivity %>%
                                   n_dependent_rules = "Dependent rules",
                                   n_airi = "AIRI"))
 
-support_sensitivity_long %>%
+support_sensitivity_plot <- support_sensitivity_long %>%
   ggplot(aes(support, n_rules, col = rule_set)) +
   geom_point() +
   geom_line() +
@@ -74,3 +74,10 @@ support_sensitivity_long %>%
   labs(x = "Minimum support (%)",
        y = "Number of rules",
        col = "Rule set")
+
+save_airi_plot(support_sensitivity_plot,
+               filename = "support_sensitivity.png",
+               width = 7.5,
+               height = 4.8)
+
+support_sensitivity_plot
