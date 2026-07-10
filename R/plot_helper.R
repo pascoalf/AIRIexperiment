@@ -32,16 +32,30 @@ save_airi_plot <- function(plot,
                            width = 7,
                            height = 5,
                            dpi = 600,
-                           units = "in"){
+                           units = "in",
+                           save_pdf = TRUE){
   dir.create("figures", showWarnings = FALSE, recursive = TRUE)
 
-  ggplot2::ggsave(filename = file.path("figures", filename),
+  output_path <- file.path("figures", filename)
+  pdf_path <- sub("\\.[[:alnum:]]+$", ".pdf", output_path)
+
+  ggplot2::ggsave(filename = output_path,
                   plot = plot,
                   width = width,
                   height = height,
                   dpi = dpi,
                   units = units,
                   bg = "white")
+
+  if(save_pdf){
+    ggplot2::ggsave(filename = pdf_path,
+                    plot = plot,
+                    width = width,
+                    height = height,
+                    units = units,
+                    device = grDevices::cairo_pdf,
+                    bg = "white")
+  }
 }
 
 plot_rule_count_comparison <- function(rule_counts,
