@@ -1,0 +1,2 @@
+"case_study","support","n_all_rules","n_dependent_rules","n_airi_improvement","n_airi_mutualInfo","n_airi_complexity","arm_algorithm","confidence","induction_method"
+"Case study 1 (MOSJ)",0.001,18620,720,17,17,17,"Eclat + ruleInduction",0.8,"ptree"
