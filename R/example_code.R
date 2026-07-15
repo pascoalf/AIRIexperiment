@@ -54,7 +54,7 @@ summary(nice_transactions)
 
 # get rhs items (set the consequent)
 classifications_rhs <- grep("Classification=", 
-                            itemLabels(transactions_full), 
+                            itemLabels(nice_transactions), 
                             value = TRUE)
 
 # mine rules
@@ -104,22 +104,36 @@ quality(nice_rules_dependent)$improvement <- interestMeasure(nice_rules_dependen
                                                              measure = "improvement")
 # Dependent rules - nonredundant
 # key items are in taxonomy var
+extract_lhs_taxa <- function(rules){
+  lhs_items <- LIST(lhs(rules), decode = TRUE)
+
+  map_chr(lhs_items, function(items){
+    taxa_items <- items[str_starts(items, "taxa=")]
+
+    if(length(taxa_items) == 0){
+      return(NA_character_)
+    }
+
+    str_remove(taxa_items[1], "^taxa=")
+  })
+}
+
+nice_rules_dependent_df <- nice_rules_dependent %>%
+  DATAFRAME() %>%
+  mutate(taxa = factor(extract_lhs_taxa(nice_rules_dependent)),
+         LHSsize = size(lhs(nice_rules_dependent)))
+
 # Remove redundancy by Improvement
 nice_dependent_rules_non_redundant <- 
-  nice_rules_dependent %>% 
-  DATAFRAME() %>% 
-  filter(str_detect(LHS, "taxa")) %>%  # remove rules without key items
-  separate_wider_delim(LHS, ",", names = "taxon", too_many = "debug") %>% 
-  select(-LHS_ok, -LHS_pieces) %>% 
-  mutate(taxon = factor(str_remove(taxon, "\\{taxon=")),
-         taxon = str_remove(taxon, "\\}"),
-         taxon = str_remove(taxon, ","),
-         taxon = factor(taxon)) %>%  
-  group_by(taxon) %>% 
+  nice_rules_dependent_df %>%
+  filter(!is.na(taxa)) %>%  # remove rules without key items
+  group_by(taxa) %>% 
   arrange(desc(improvement)) %>% ## change redundancy removal metric here
   slice_head(n = 1) %>% 
   ungroup() %>% 
   select(LHS, RHS, support,	confidence, coverage,	lift,	count,	conviction,	mutualInfo,	improvement) 
 
 # View AIRItaxa result, using Improvement for redundancy removal
-nice_dependent_rules_non_redundant %>% View()
+if(interactive()){
+  nice_dependent_rules_non_redundant %>% View()
+}
