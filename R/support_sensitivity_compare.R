@@ -56,13 +56,13 @@ support_sensitivity_long <- support_sensitivity %>%
   mutate(rule_set = dplyr::recode(rule_set,
                                   n_all_rules = "All rules",
                                   n_dependent_rules = "Dependent rules",
-                                  n_airi = "AIRI"))
+                                  n_airi = "AIRItaxa"))
 
 support_sensitivity_plot <- support_sensitivity_long %>%
   ggplot(aes(support, n_rules, col = rule_set)) +
   geom_point() +
   geom_line() +
-  geom_text(data = filter(support_sensitivity_long, rule_set == "AIRI"),
+  geom_text(data = filter(support_sensitivity_long, rule_set == "AIRItaxa"),
             aes(label = n_rules),
             vjust = -0.7,
             show.legend = FALSE) +

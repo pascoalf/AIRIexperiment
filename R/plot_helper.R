@@ -14,7 +14,7 @@ airi_plot_theme <- function(base_size = 12){
 
 airi_rule_set_colors <- c("All rules" = "#0072B2",
                           "Dependent rules" = "#D55E00",
-                          "AIRI" = "#009E73")
+                          "AIRItaxa" = "#009E73")
 
 airi_case_study_colors <- c("Case study 1 (MOSJ)" = "#0072B2",
                             "Case study 2 (EMOSE)" = "#D55E00")

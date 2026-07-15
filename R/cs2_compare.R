@@ -93,15 +93,15 @@ cs2.conv.5_dep.df <- cs2.conv.5_dep %>%
 
 # airi - by improv
 cs2.airi_emose_dep_imp <- emose_dependent_rules_non_redundant %>% 
-  select(!Metric) %>% mutate(method = "AIRI \n by improvement", subset = "from dependent rules")
+  select(!Metric) %>% mutate(method = "AIRItaxa \n by improvement", subset = "from dependent rules")
 
 # airi - by mutual information
 cs2.airi_emose_dep_mi <- emose_non_redundant_by_mutualInfo %>% 
-  select(!Metric) %>% mutate(method = "AIRI \n by mutualInfo", subset = "from dependent rules")
+  select(!Metric) %>% mutate(method = "AIRItaxa \n by mutualInfo", subset = "from dependent rules")
 
 # airi - by complexity
 cs2.airi_emose_dep_comp <- emose_non_redundant_by_complexity %>% 
-  select(!Metric) %>% mutate(method = "AIRI \n by complexity", subset = "from dependent rules")
+  select(!Metric) %>% mutate(method = "AIRItaxa \n by complexity", subset = "from dependent rules")
 
 # Add original rules
 quality(emose_rules)$mutualInfo = interestMeasure(emose_rules, "mutualInfo")
@@ -136,9 +136,9 @@ multi_options_cs2 <- cs2.airi_emose_dep_comp %>%
   rbind(cs2.conv.1_all.df)%>% 
   mutate(method = factor(method, 
                          levels = c("None", 
-                                    "AIRI \n by improvement",
-                                    "AIRI \n by mutualInfo",
-                                    "AIRI \n by complexity",
+                                    "AIRItaxa \n by improvement",
+                                    "AIRItaxa \n by mutualInfo",
+                                    "AIRItaxa \n by complexity",
                                     "Conf. \U2265 90%", "Conf. = 100%", 
                                     "Lift \U2265 1", "Lift \U2265 10",
                                     "Conv. \U2265 5", "Conv. \U2265 1")))

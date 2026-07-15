@@ -91,15 +91,15 @@ conv.10_dep.df <- conv.10_dep %>%
 
 # airi - by improv
 airi_mosj_dep_imp <- dependent_rules_non_redundant %>% 
-  select(!Metric) %>% mutate(method = "AIRI \n by improvement", subset = "from dependent rules")
+  select(!Metric) %>% mutate(method = "AIRItaxa \n by improvement", subset = "from dependent rules")
 
 # airi - by mutual information
 airi_mosj_dep_mi <- non_redundant_by_mutualInfo %>% 
-  select(!Metric) %>% mutate(method = "AIRI \n by mutualInfo", subset = "from dependent rules")
+  select(!Metric) %>% mutate(method = "AIRItaxa \n by mutualInfo", subset = "from dependent rules")
 
 # airi - by complexity
 airi_mosj_dep_comp <- non_redundant_by_complexity %>% 
-  select(!Metric) %>% mutate(method = "AIRI \n by complexity", subset = "from dependent rules")
+  select(!Metric) %>% mutate(method = "AIRItaxa \n by complexity", subset = "from dependent rules")
 
 # Add original rules
 quality(full_rules)$mutualInfo = interestMeasure(full_rules, "mutualInfo")
@@ -134,9 +134,9 @@ multi_options_cs1 <- airi_mosj_dep_comp %>%
   rbind(conv.5_all.df)%>% 
   mutate(method = factor(method, 
                          levels = c("None", 
-                                    "AIRI \n by improvement",
-                                    "AIRI \n by mutualInfo",
-                                    "AIRI \n by complexity",
+                                    "AIRItaxa \n by improvement",
+                                    "AIRItaxa \n by mutualInfo",
+                                    "AIRItaxa \n by complexity",
                                     "Conf. \U2265 90%", "Conf. = 100%", 
                                     "Lift \U2265 1", "Lift \U2265 10",
                                     "Conv. \U2265 10", "Conv. \U2265 5")))

@@ -78,13 +78,13 @@ dependence_test_sensitivity_long <- dependence_test_sensitivity %>%
   mutate(rule_set = dplyr::recode(rule_set,
                                   n_all_rules = "All rules",
                                   n_dependent_rules = "Dependent rules",
-                                  n_airi = "AIRI"))
+                                  n_airi = "AIRItaxa"))
 
 dependence_test_sensitivity_plot <- dependence_test_sensitivity_long %>%
   ggplot(aes(support, n_rules, col = rule_set, linetype = dependence_test)) +
   geom_point(aes(shape = dependence_test)) +
   geom_line() +
-  geom_text(data = filter(dependence_test_sensitivity_long, rule_set == "AIRI"),
+  geom_text(data = filter(dependence_test_sensitivity_long, rule_set == "AIRItaxa"),
             aes(label = n_rules),
             position = position_dodge(width = 0.12),
             vjust = -0.7,
