@@ -1,0 +1,5 @@
+"case_study","arm_algorithm","support","confidence","induction_method","n_all_rules","n_dependent_rules","n_airi_improvement","n_airi_complexity","n_airi_mutualInfo"
+"Case study 1 (MOSJ)","Apriori",0.001,0.8,NA,18620,720,17,17,17
+"Case study 1 (MOSJ)","Eclat + ruleInduction",0.001,0.8,"ptree",18620,720,17,17,17
+"Case study 2 (EMOSE)","Apriori",0.001,0.8,NA,3714,745,24,24,24
+"Case study 2 (EMOSE)","Eclat + ruleInduction",0.001,0.8,"ptree",3714,745,24,24,24
