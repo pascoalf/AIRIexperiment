@@ -176,3 +176,19 @@ save_airi_plot(cs2_mutual_information_comparison_plot,
                height = 5)
 
 cs2_mutual_information_comparison_plot
+
+if(exists("cs1_rule_count_comparison_plot")){
+  rule_count_comparison_grid_plot <- ggarrange(
+    cs1_rule_count_comparison_plot + labs(tag = NULL),
+    cs2_rule_count_comparison_plot + labs(tag = NULL),
+    ncol = 2,
+    labels = c("a", "b"),
+    common.legend = TRUE,
+    legend = "top"
+  )
+
+  save_airi_plot(rule_count_comparison_grid_plot,
+                 filename = "cs1_cs2_rule_count_comparison.png",
+                 width = 12,
+                 height = 5.4)
+}

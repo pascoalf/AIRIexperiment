@@ -90,3 +90,19 @@ save_airi_plot(cs2_systematic_rule_count_linear_plot,
                height = 4.8)
 
 cs2_systematic_rule_count_linear_plot
+
+if(exists("cs1_systematic_rule_count_plot_a")){
+  systematic_rule_count_log_grid_plot <- ggarrange(
+    cs1_systematic_rule_count_plot_a + labs(tag = NULL),
+    cs2_systematic_rule_count_log_plot + labs(tag = NULL),
+    ncol = 2,
+    labels = c("a", "b"),
+    common.legend = TRUE,
+    legend = "top"
+  )
+
+  save_airi_plot(systematic_rule_count_log_grid_plot,
+                 filename = "cs1_cs2_systematic_rule_count_log.png",
+                 width = 12,
+                 height = 5.4)
+}
