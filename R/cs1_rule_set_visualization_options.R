@@ -108,7 +108,7 @@ cs1_network_graph <- graph_from_data_frame(
 cs1_rule_network_plot <- ggraph(cs1_network_graph, layout = "fr") +
   geom_edge_link(aes(colour = Classification),
                  linewidth = 0.45,
-                 alpha = 0.5) +
+                 alpha = 0.8) +
   geom_node_point(aes(shape = node_type),
                   size = 3,
                   colour = "grey20") +
@@ -117,7 +117,7 @@ cs1_rule_network_plot <- ggraph(cs1_network_graph, layout = "fr") +
                  size = 2.7) +
   scale_edge_colour_manual(values = c("Abundant" = "#0072B2",
                                       "Rare" = "#D55E00",
-                                      "Undetermined" = "#009E73")) +
+                                      "Undetermined" = "#882255")) +
   facet_edges(~Metric) +
   airi_plot_theme(base_size = 10) +
   theme(axis.line = element_blank(),
@@ -132,4 +132,3 @@ save_airi_plot(cs1_rule_network_plot,
                filename = "cs1_rule_set_taxon_condition_network.png",
                width = 10,
                height = 5.8)
-

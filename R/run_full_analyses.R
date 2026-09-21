@@ -25,6 +25,7 @@ run_analysis_script("R/cs1_arm.R")
 run_analysis_script("R/cs1_airi_steps.R")
 run_analysis_script("R/cs1_compare.R")
 run_analysis_script("R/cs1_syst_compare.R")
+run_analysis_script("R/cs1_rule_set_visualization_options.R")
 
 ## Case study 2 - EMOSE
 run_analysis_script("R/cs2_prepare_emose_data.R")
@@ -32,6 +33,7 @@ run_analysis_script("R/cs2_arm_emose.R")
 run_analysis_script("R/cs2_airi_emose.R")
 run_analysis_script("R/cs2_compare.R")
 run_analysis_script("R/cs2_syst_compare.R")
+run_analysis_script("R/cs2_rule_set_visualization_options.R")
 
 ## Reviewer sensitivity analyses
 if(run_review_sensitivity){
